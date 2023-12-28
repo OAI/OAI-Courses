@@ -146,11 +146,31 @@ We can explain the features as follows:
 - Each Path Item Object has one-or-more [Operation Objects](https://spec.openapis.org/oas/latest.html#operation-object). These provide the HTTP Methods that are supported at the URI.
 - Each Operation, as well identifying the supported HTTP provides summary and description information and tags, then references one-or-more parameters expressed as [Parameter Objects](https://spec.openapis.org/oas/latest.html#parameter-object), and [Request]() and [Response Objects](https://spec.openapis.org/oas/latest.html#response-object) encapsulated with [Media Type Objects](https://spec.openapis.org/oas/latest.html#media-type-object). Responses are referenced through a map of possible HTTP return codes, with a `default` option that can be provided as a catchall as shown in the code snippet.
 
-It's worth noting that at the current version of OpenAPI a Path Item Object cannot be reused directly i.e. there currently is no support for templating a given combination of URL, method, parameter and request/response body. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a healthcheck endpoint across all APIs. To achieve this in OpenAPI at the time of writing that organisation would be compelled to merge a template into their API description documents using tools outside the specification. This feature is likely to be addressed in the next major version.
+It's worth noting that at the current version of OpenAPI a Path Item Object cannot be reused directly i.e. there currently is no support for templating a given combination of URL, method, parameter and request/response body. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a health-check endpoint across all APIs. To achieve this in OpenAPI at the time of writing, that organisation would be compelled to merge a template into their API description documents using tools outside the specification. This feature is likely to be addressed in the next major version.
 
 ## Providing Parameters
 
-…
+URLs, Paths and Methods are, however, only part of how API providers typically define the operations supported by their API. Parameters - of different kinds - are critical to allowing API consumers to invoke a given operation with the correct arguments. In HTTP terms we generally understand parameters are represented in a [Query](https://datatracker.ietf.org/doc/html/rfc3986#section-3.4), with parameters passed that can influence the retrieval of information from the URL in question.
+
+In OpenAPI the idea of parameters is extended to incorporate other means to pass information when invoking an operation through the [Parameter Object](https://spec.openapis.org/oas/latest.html#parameter-object). OAS specifics four types of parameter, namely:
+
+- **Path**: A part of the URL, denoted using handlebar syntax in the Path Item Map. The specification provides the example `/items/{itemId}`, with the Petstore example being defined as above as `/pets/{petId}`. In practical terms what this means for an API consumer is that this value **_can change_** at each invocation of given operation, and the consumer needs to pass the appropriate information relevant to the context of the invocation i.e. to retrieve information on a given item or pet in our examples. APIs that follow the REST architectural style will most likely make extensive use of Path Parameters, using them to identify a given resource in a collection of resources.
+- **Query**: Query Parameters reflect the Query string as described above. API providers often specify query parameters as optional arguments that can be used to modify the behaviours of a given operation. An oft-quoted example is for filtering a collection of resources when addressing a collection like `/pets`. An API provider might allow retrieval of all Pets, but provide the query parameter `petType` so API consumers can retrieve pets of a given type - Cat, Dog, etc. Variations on this theme are myriad.
+- **Header**: Header parameters are [HTTP headers](https://httpwg.org/specs/rfc7230.html#header.fields), specifically request parameters in this context. Headers can also be defined [elsewhere](https://spec.openapis.org/oas/latest.html#header-object) and be referenced in an [Encoding Object](https://spec.openapis.org/oas/latest.html#encoding-object).
+- **Cookie**: Cookie are also supported, allowing cookie data to be specified as a parameter.
+
+In all cases a Parameter Object defines the attributes of the parameter in question. Taking the Petstore example above:
+
+```yaml
+name: petId
+in: path
+required: true
+description: The id of the pet to retrieve
+schema:
+  type: string
+```
+
+The `petId` parameter is specified as a Path parameter, provided with a description, whether it is mandatory or optional, and is declared with a type definition that specifies the data type of the parameter. API consumers can therefore easily understand and implement parameter handling for the APIs they consume.
 
 ## Creating Request and Response Objects
 
@@ -229,6 +249,8 @@ Guidance for this feature is relatively-limited in the specification itself as i
 ## Plenary
 
 In this module we’ve learnt the fundamentals of OpenAPI include the basis of the structure, how it relates to HTTP and other technologies that support the delivery of the specification itself. We’ve also looked at API security and how it is expressed in the specification and at what Specification Extensions are with an example of how they can be used.
+
+Our list isn't exhaustive. For example, we've not taken a look at the [Server Object](https://spec.openapis.org/oas/latest.html#server-object), which provides details on where a given API is available or the [Link Object](https://spec.openapis.org/oas/latest.html#link-object) that provides links between a given response and a subsequent request. This is for good reason. What we've discussed are core features of OAS, whilst these examples are either implemented much less often or offer functionality that has had mixed success when used by API providers or supported by tooling makers. As version 4 of OpenAPI evolves we'll revisit our course content and offer revisions that take the same approach, highlighting the most frequently-used features and offering appropriate guidance on their implementation.
 
 In our next module we’ll look at the specification in more practical terms. We will cover the two most salient API design methodologies and describe the implications of each, with practical examples of how API providers use them to deliver a fully-featured API description document to their API consumers.
 
