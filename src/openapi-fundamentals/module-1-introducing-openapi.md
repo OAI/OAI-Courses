@@ -187,7 +187,7 @@ What is considered to be the cornerstone of the OpenAPI specification?
 
 ### Question 9
 
-What organisation provides the governance structure for the OpenAPI Initiative?
+Which organisation provides the governance structure for the OpenAPI Initiative?
 
 - [ ] Open Source Initiative
 - [ ] Mozilla Foundation
