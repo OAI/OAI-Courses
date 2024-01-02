@@ -38,7 +38,7 @@ API specification languages help meet this challenge.
 
 Providing an accurate description of a software interface is not a unique problem. Different styles of software integration have been developed over the years that use a description document of sorts to describe their functionality. Different programming languages and software providers use interface description languages (IDL) as a feature of providing appropriate documentation.
 
-The most obvious example that was popular at around the time the API Economy started to grow is the Web Services Description Language (WSDL). This is used in software-oriented architectures (SOA) and is very much a technical description that provides the information required to engineer a software client to call a given operation. These documents are, however, geared towards a specific technology stack, largely due to the software vendors involved in the SOA world.
+The most obvious example that was popular at around the time the API Economy started to grow is the Web Services Description Language (WSDL). This is used in software-oriented architectures (SOA) and is very much a technical description that provides the information required to engineer a software client to call a given operation. These documents are, however, geared towards a specific technology stack and architectural style, largely due to the software vendors involved in the SOA world.
 
 The growth of the API Economy - being organic in nature - has been much more distributed. The protagonists have also favored the technologies and toolsets they are familiar with and that can be used without specific libraries or software development kits. For example, HTTP is at the core of what we have come to call web APIs because it underpins the internet, provides an obvious transport mechanism and has a freely available client in the vast majority of programming languages and platforms. This has been bolstered by the adoption of Representational State Transfer, or REST, as the salient architectural style of API, which is built on top of HTTP.
 
@@ -75,7 +75,7 @@ Establishing a common vernacular shared between API providers and API consumers 
 
 A number of specification languages exist with examples including RAML, API Blueprint and Swagger. Each follows a similar mechanism of using a structured and human readable notation language like JSON or YAML coupled with an object specification and descriptions formatted in Markdown to provide a complete representation of the structure of an API.
 
-In the context of this course Swagger is the most pertinent API specification language. Swagger was originally created by Smartbear Software and was used in both their product and open source tools to define API specifications across the API Economy.
+In the context of this course Swagger is the most pertinent API specification language. Swagger was originally created by SmartBear Software and was used in both their product and open source tools to define API specifications across the API Economy.
 
 Swagger was donated by SmartBear in 2015 to the OpenAPI Initiative and forms the basis of the OpenAPI specification language, which is arguably the most prevalent specification language in use today.
 
@@ -111,22 +111,94 @@ In our next module we’ll go deeper into OpenAPI, taking apart the specificatio
 
 ## Quiz
 
+To help reinforce your knowledge please answer the following questions.
+
 ### Question 1
+
+What protocol does the OpenAPI specification aim to represent?
+
+- [ ] SMTP
+- [ ] DNS
+- [ ] POP
+- [x] HTTP
 
 ### Question 2
 
+Which of the following does an API specification language typically **_NOT_** attempt to describe?
+
+- [ ] URLs
+- [ ] Request bodies
+- [x] MAC Addresses
+- [ ] HTTP response codes
+
 ### Question 3
+
+What does the abbreviation REST stand for?
+
+- [x] Representational state transfer
+- [ ] Restricted state transfer
+- [ ] Resource state transfer
+- [ ] Requested state transfer
 
 ### Question 4
 
-### Question 5
+What was the OpenAPI specification formally known as?
+
+- [ ] I/O Docs
+- [x] Swagger
+- [ ] RAML
+- [ ] API Blueprint
+
+### Question 5
+
+Which of the following is **_NOT_** a specification language developed during the growth of the API economy?
+
+- [ ] RAML
+- [ ] API Blueprint
+- [ ] OpenAPI
+- [x] Web Services Description Language
 
 ### Question 6
 
+Who is responsible for the OpenAPI Specification?
+
+- [x] OpenAPI Initiative
+- [ ] Linux Foundation
+- [ ] SmartBear
+- [ ] Google
+
 ### Question 7
+
+In what year was Swagger donated to the OpenAPI Initiative?
+
+- [ ] 2010
+- [ ] 2012
+- [x] 2015
+- [ ] 2021
 
 ### Question 8
 
+What is considered to be the cornerstone of the OpenAPI specification?
+
+- [ ] Adherence to HTTP
+- [ ] Use of JSON Schema
+- [ ] Extensibility
+- [x] Vendor-neutrality
+
 ### Question 9
 
+What organisation provides the governance structure for the OpenAPI Initiative?
+
+- [ ] Open Source Initiative
+- [ ] Mozilla Foundation
+- [ ] Apache Software Foundation
+- [x] Linux Foundation
+
 ### Question 10
+
+What does the abbreviation SIG stand for?
+
+- [ ] Standardised Internet Grading
+- [ ] Special Internet Group
+- [x] Special Interest Group
+- [ ] Significant Interest Group
