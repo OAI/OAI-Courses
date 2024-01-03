@@ -90,13 +90,13 @@ info:
 
     This provides a high-level summary. An image is provided below:
 
-    ![Image embedded in OpenAPI document](images/rendered-document.jpg)
+    ![Image embedded in OpenAPI document](images/example-image.png)
   version: 0.0.1
 ```
 
-The important point here is that tooling built for OAS can then render this information in a human-friendly format (the example uses Redoc):
+The important point here is that tooling built for OAS can then render this information in a human-friendly format (the example uses [Redoc](https://github.com/Redocly/redoc)):
 
-![Example of rendered output]()
+![Example of rendered output](images/rendered-document.png)
 
 The Info Object, whilst appearing at face value to hold only cursory information provide significant means to extend the information that an OpenAPI document can deliver. This therefore has provides considerable capabilities for API providers to use OAS as the spine of their documentation, pulling together both human- and machine-orientated information into a single format.
 
