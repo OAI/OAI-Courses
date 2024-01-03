@@ -94,7 +94,7 @@ info:
   version: 0.0.1
 ```
 
-The important point here is that tooling built for OAS can then render this information in a human-friendly format (the example uses [Redoc](https://github.com/Redocly/redoc)):
+The important point here is that tooling built for OAS can then render this information in a human-friendly format (the screenshot below uses [Redoc](https://github.com/Redocly/redoc) _par exemplar_):
 
 ![Example of rendered output](images/rendered-document.png)
 
