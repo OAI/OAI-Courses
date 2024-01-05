@@ -22,7 +22,7 @@ The first, Swagger, was retrospectively labelled 2.0 after it was donated by Sma
 
 The latest version, [3.1](https://spec.openapis.org/oas/latest.html), was published February 2021.
 
-A new major version, currently codenamed Moonwalk, is being mooted. At the time of writing the construct of this version have yet to be agreed upon.
+A new major version, currently codenamed Moonwalk, is [being developed](https://www.openapis.org/blog/2023/12/06/openapi-moonwalk-2024) with the goal of general availability in 2024. At the time of writing the construct of this version have yet to be agreed upon.
 
 For the purposes of this module wherever we refer to OpenAPI we mean version 3.1. Regardless of the version, however, the features of HTTP that are mirrored in the structure of OpenAPI. This is a fundamental point of the specification language that we should consider in more detail.
 
@@ -46,7 +46,7 @@ These mappings demonstrate the strong association between HTTP and OpenAPI and t
 At an implementation level OpenAPI also uses a number of supporting technologies that provide the underpinnings of the specification:
 
 - JSON/YAML: An OpenAPI document is written in JSON or YAML (both are supported as first class citizens).
-- JSON Schema: JSON Schema is used to provide the means to define the properties of an object - termed a **Schema Object - **for request and response payloads.
+- JSON Schema: JSON Schema is used to provide the means to define the properties of an object - defined as a **[Schema Object](https://spec.openapis.org/oas/v3.1.0#schema-object)** in OpenAPI - for request and response payloads and for defining types for parameters and headers.
 - Markdown: [CommonMark](https://commonmark.org/) provides the syntax for adding description to the document intended for human beings to read.
 
 The features therefore provide the fundamentals of both how an OpenAPI document is structured and the affordances other technologies provide in terms of turning the model into a usable API description document.
@@ -59,12 +59,7 @@ An OpenAPI document has a standard structure prescribed by the specification lan
 
 - **Info Object**: Provides high-level information about the API being described.
 - **Paths Object**: Describes the operations the API provides.
-- **Components Object**: The parent object that houses all reusable objects within a given OpenAPI document. The available reusable objects include:
-  - **Headers**.
-  - **Parameters**.
-  - **Request Bodies**.
-  - **Responses**.
-  - **Security Schemes**.
+- **Components Object**: The parent object that houses all reusable objects within a given OpenAPI document.
 
 We’ll look at each of these in more detail as we progress through the module.
 
@@ -95,17 +90,17 @@ info:
 
     This provides a high-level summary. An image is provided below:
 
-    ![Image embedded in OpenAPI document](image.jpg)
+    ![Image embedded in OpenAPI document](images/example-image.png)
   version: 0.0.1
 ```
 
-The important point here is that tooling built for OAS can then render this information in a human-friendly format:
+The important point here is that tooling built for OAS can then render this information in a human-friendly format (the screenshot below uses [Redoc](https://github.com/Redocly/redoc) _par exemplar_):
 
-![Example of rendered output]()
+![Example of rendered output](images/rendered-document.png)
 
 The Info Object, whilst appearing at face value to hold only cursory information provide significant means to extend the information that an OpenAPI document can deliver. This therefore has provides considerable capabilities for API providers to use OAS as the spine of their documentation, pulling together both human- and machine-orientated information into a single format.
 
-## URLs, Paths amd Methods
+## URLs, Paths and Methods
 
 The next and most significant section in the OpenAPI document is the **[Paths Object](https://spec.openapis.org/oas/latest.html#paths-object)**. The Paths Object is the key resource in an OpenAPI document in that in allies a given URL and HTTP method to one-or-more operations.
 
@@ -146,11 +141,31 @@ We can explain the features as follows:
 - Each Path Item Object has one-or-more [Operation Objects](https://spec.openapis.org/oas/latest.html#operation-object). These provide the HTTP Methods that are supported at the URI.
 - Each Operation, as well identifying the supported HTTP provides summary and description information and tags, then references one-or-more parameters expressed as [Parameter Objects](https://spec.openapis.org/oas/latest.html#parameter-object), and [Request]() and [Response Objects](https://spec.openapis.org/oas/latest.html#response-object) encapsulated with [Media Type Objects](https://spec.openapis.org/oas/latest.html#media-type-object). Responses are referenced through a map of possible HTTP return codes, with a `default` option that can be provided as a catchall as shown in the code snippet.
 
-It's worth noting that at the current version of OpenAPI a Path Item Object cannot be reused directly i.e. there currently is no support for templating a given combination of URL, method, parameter and request/response body. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a healthcheck endpoint across all APIs. To achieve this in OpenAPI at the time of writing that organisation would be compelled to merge a template into their API description documents using tools outside the specification. This feature is likely to be addressed in the next major version.
+It's worth noting that at version 3.1 of OpenAPI a Path Item Object can be reused directly i.e. a given combination of URL, method, parameter and request/response body can be defined in the `pathItems` property in the Components Object. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a health-check endpoint across all APIs and resolve them to a given Path Item Object to the correct definition. This feature has considerable power for creating organization-wide templates for purposes of reusability, and is discussed in more detail [below](#defining-reusable-components).
 
 ## Providing Parameters
 
-…
+URLs, Paths and Methods are, however, only part of how API providers typically define the operations supported by their API. Parameters - of different kinds - are critical to allowing API consumers to invoke a given operation with the correct arguments. In HTTP terms we generally understand parameters are represented in a [Query](https://datatracker.ietf.org/doc/html/rfc3986#section-3.4), with parameters passed that can influence the retrieval of information from the URL in question.
+
+In OpenAPI the idea of parameters is extended to incorporate other means to pass information when invoking an operation through the [Parameter Object](https://spec.openapis.org/oas/latest.html#parameter-object). OAS specifics four types of parameter, namely:
+
+- **Path**: A part of the URL, denoted using handlebar syntax in the Path Item Map. The specification provides the example `/items/{itemId}`, with the Petstore example being defined as above as `/pets/{petId}`. In practical terms what this means for an API consumer is that this value **_can change_** at each invocation of given operation, and the consumer needs to pass the appropriate information relevant to the context of the invocation i.e. to retrieve information on a given item or pet in our examples. APIs that follow the REST architectural style will most likely make extensive use of Path Parameters, using them to identify a given resource in a collection of resources.
+- **Query**: Query Parameters reflect the Query string as described above. API providers often specify query parameters as optional arguments that can be used to modify the behaviours of a given operation. An oft-quoted example is for filtering a collection of resources when addressing a collection like `/pets`. An API provider might allow retrieval of all Pets, but provide the query parameter `petType` so API consumers can retrieve pets of a given type - Cat, Dog, etc. Variations on this theme are myriad.
+- **Header**: Header parameters are [HTTP headers](https://httpwg.org/specs/rfc7230.html#header.fields), specifically request parameters in this context. Headers can also be defined [elsewhere](https://spec.openapis.org/oas/latest.html#header-object) and be referenced in an [Encoding Object](https://spec.openapis.org/oas/latest.html#encoding-object).
+- **Cookie**: Cookie are also supported, allowing cookie data to be specified as a parameter.
+
+In all cases a Parameter Object defines the attributes of the parameter in question. Taking the Petstore example above:
+
+```yaml
+name: petId
+in: path
+required: true
+description: The id of the pet to retrieve
+schema:
+  type: string
+```
+
+The `petId` parameter is specified as a Path parameter, provided with a description, whether it is mandatory or optional, and is declared with a type definition using a Schema Object that specifies the data type of the parameter. API consumers can therefore easily understand and implement parameter handling for the APIs they consume.
 
 ## Creating Request and Response Objects
 
@@ -198,7 +213,114 @@ properties:
     maxItems: 5
 ```
 
-From this simple example we can see how JSON Schema allows us to quickly build up a picture of the data we expect to receive or return at our API.
+From this simple example we can see how JSON Schema allows us to quickly build up a picture of the data we expect to receive or return at our API. We can then create a Request Body or Response Object by enclosing the Schema Object in a Media Type Object. For example, a Request Body Object that is expected to be received in JSON can be defined as follows based on the snippet above:
+
+```yaml
+description: Request body containing expected strings
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^\w$
+          maxItems: 5
+```
+
+Whilst a Response Object can be defined as follows, which includes expected response HTTP headers:
+
+```yaml
+description: Response payload including expected HTTP headers
+headers:
+  "x-example-header":
+    description: Example header using deprecated x- nomenclature
+    schema:
+      type: string
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^\w$
+          maxItems: 5
+```
+
+The use of Schema Objects is not restricted solely to Request and Response payloads. They are used, for example, to define schema definitions for Parameter Objects as well. Being able to leverage JSON Schema to define such requirements is important across OpenAPI.
+
+The important thing to note in the context of the examples above is that an API provider can support more than one content type, perhaps adding `text/xml` to the payload encoding they support. In such cases declaring the Schema Object inline for each Media Type is suboptimal, and a reusable definition is useful. This stands across the vast majority of OpenAPI objects, and object reuse is therefore an important topic.
+
+## Defining Reusable Objects
+
+So far we've focused on describing properties in the context of where they are used _inline_ within an OpenAPI document (there are examples of reuse in the snippets above, but we don't discuss them). There is, however, many very strong use cases for creating reusable object definitions. This is where the [Components Object](https://spec.openapis.org/oas/latest.html#components-object) comes in.
+
+The Components Object provides a standardized location for storing reusable objects.
+
+The available properties are as follows (not all of which are described above):
+
+- Callbacks.
+- Examples.
+- Headers.
+- Links.
+- Path Items.
+- Parameters.
+- Request Bodies.
+- Responses.
+- Schemas.
+- Security Schemes.
+
+In our Petstore snippet [above](#urls-paths-and-methods) we already show how Component properties can be referenced, namely by using a [Reference Object](https://spec.openapis.org/oas/latest.html#referenceObject) which is supported by [rules](https://spec.openapis.org/oas/latest.html#relativeReferencesURI) for resolving URIs. If we were to template the Path Item above - because reusing this object has value - the example can be refactored as follows (using placeholders for the Schema Objects):
+
+```yaml
+paths:
+  /pets/{petId}:
+    $ref: "#/components/pathItems/petById"
+components:
+  pathItems:
+    petById:
+      get:
+        summary: Info for a specific pet
+        operationId: showPetById
+        tags:
+          - pets
+        parameters:
+          - name: petId
+            in: path
+            required: true
+            description: The id of the pet to retrieve
+            schema:
+              type: string
+        responses:
+          "200":
+            description: Expected response to a valid request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Pet"
+          default:
+            description: unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+  schemas:
+    Pet:
+      type: object
+    Error:
+      type: object
+```
+
+This approach stands true for all objects that the Components object supports. References can also be remote, meaning external OpenAPI documents (or JSON Schema document) can be referenced. This feature has immense power, especially in our use case of a standardized health check object; organizations can define the required object once and then reference it from all APIs. Such an approach - when coupled with linting using relevant tools - can provide design-time governance for APIs.
 
 ## Describing Security Requirements
 
@@ -214,15 +336,71 @@ OpenAPI currently provides support for five different security schemes through t
 - **OAuth 2.0** (`oauth2`): OAuth 2.0 is a fundamental building block of the API Economy as it facilitates allowing users - real human beings - to delegate their access to a third party at a given service provider. It is therefore well represented in OpenAPI, with the means to describe the [most important](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields-24) OAuth flows.
 - **OpenID Connect** (`openIdConnect`): Support for OpenID Connect is supported in providing a link to the OpenID Connect Discovery metadata. Whilst this in itself does not provide much in the way of rich metadata it provides a pointer to a very rich document that can be programmatically parsed, allowing API consumers to access and act on this information in their applications in an automated manner.
 
-It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements are applied to a given Operation or to the entire API (as they can be specified at the root level of the OpenAPI document). API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI.
+Each of these can be applied to a given Operation Object, or defined globally at the root level of the OpenAPI document. The Petstore example has been amended in the snippet below, and shows how HTTP Basic Authentication is required globally, but an API key is required specifically for a `get` on the `/pets/{petId}` Path Item:
 
-However, OpenAPI still provides a strong indicator of the security requirement and with the judicious use of descriptions and pointers to other external resources it still serves to provide a comprehensive description of the API for consumers.
+```yaml
+openapi: 3.1.0
+info:
+  title: Petstore Snippet
+  version: 0.0.1
+security:
+  - basicAuth: []
+paths:
+  /pets/{petId}:
+    get:
+      security:
+        - apiKey: []
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Pet:
+      type: object
+    Error:
+      type: object
+  securitySchemes:
+    apiKey:
+      description: API Key
+      type: apiKey
+      name: api-key
+      in: header
+    basicAuth:
+      description: Basic Authentication
+      type: http
+      scheme: basic
+```
+
+It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements. API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI.
+
+However, OpenAPI still provides a strong indicator of the security requirement and, with the judicious use of descriptions and pointers to other external resources, it still serves to provide a comprehensive description of the API for consumers.
 
 ## Using Specification Extensions
 
 The last feature of OpenAPI that needs mentioning at this point is [Specification Extensions](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#specification-Extensions). This object provides the means for implementers or API providers to follow a standardized pattern for extending the OpenAPI specification. They can provide additional properties in the OpenAPI document, prefixed with `x-`, to denote that the property is not a core OpenAPI property. This allows tooling makers to easily identify Specification Extensions and ignore them where they do not support them or are not relevant.
 
-This is useful where, for example, a vendor can provide arguments that are not covered in the core specification for configuring their tools. Taking an example from an OpenAPI member, SmartBear provides extensions in their [SwaggerHub product](https://support.smartbear.com/swaggerhub/docs/en/manage-apis/swaggerhub-vendor-extensions.html) to enhance certain features of the product, including integrating SwaggerHub with external API gateway providers.
+This is useful where, for example, a vendor can provide arguments that are not covered in the core specification for configuring their tools. Taking an example from an OpenAPI member, SmartBear provides extensions in their [SwaggerHub](https://support.smartbear.com/swaggerhub/docs/en/manage-apis/swaggerhub-vendor-extensions.html) product to enhance certain features of the product, including integrating SwaggerHub with external API gateway providers.
 
 Guidance for this feature is relatively-limited in the specification itself as it is used at the behest of specification implementers. It can provide, however, a very powerful means for extending OpenAPI whilst preserving the core of the specification.
 
@@ -230,26 +408,100 @@ Guidance for this feature is relatively-limited in the specification itself as i
 
 In this module we’ve learnt the fundamentals of OpenAPI include the basis of the structure, how it relates to HTTP and other technologies that support the delivery of the specification itself. We’ve also looked at API security and how it is expressed in the specification and at what Specification Extensions are with an example of how they can be used.
 
+Our list isn't exhaustive. For example, we've not taken a look at the [Server Object](https://spec.openapis.org/oas/latest.html#server-object), which provides details on where a given API is available or the [Link Object](https://spec.openapis.org/oas/latest.html#link-object) that provides links between a given response and a subsequent request. This is for good reason. What we've discussed are core features of OAS, while the examples quoted are either implemented much less often or offer functionality that has had mixed success when used by API providers or supported by tooling makers. As version 4 of OpenAPI evolves we'll revisit our course content and offer revisions that take the same approach, highlighting the most frequently-used features and offering appropriate guidance on their implementation.
+
 In our next module we’ll look at the specification in more practical terms. We will cover the two most salient API design methodologies and describe the implications of each, with practical examples of how API providers use them to deliver a fully-featured API description document to their API consumers.
 
 ## Quiz
 
+To help reinforce your knowledge please answer the following questions.
+
 ### Question 1
+
+What object in OpenAPI is used to define the available URIs for a given API?
+
+- [ ] Info
+- [ ] Sidewalk
+- [x] Paths
+- [ ] Path Item
 
 ### Question 2
 
+In which object would you find the `version` property?
+
+- [x] Info
+- [ ] Components
+- [ ] Description
+- [ ] Summary
+
 ### Question 3
+
+What can be used to add formatted descriptions to OpenAPI documents?
+
+- [ ] AsciiDoc
+- [x] Markdown
+- [ ] Latex
+- [ ] Plain text
 
 ### Question 4
 
+A Path Item object provides one-or-more what, identified by a HTTP method?
+
+- [x] Operations
+- [ ] Parameters
+- [ ] Servers
+- [ ] Descriptions
+
 ### Question 5
+
+What property can be used to be specify a standard response that will be received if no return code is specified?
+
+- [ ] `standard`
+- [ ] `xxx`
+- [ ] `all`
+- [x] `default`
 
 ### Question 6
 
+Which of the following are valid Parameters Object types (choose 2)?
+
+- [ ] `body`
+- [x] `in`
+- [ ] `text`
+- [x] `query`
+
 ### Question 7
+
+What specification language is used to define Schema Objects?
+
+- [ ] XML Schema
+- [ ] grpc
+- [x] JSON Schema
+- [ ] RDF
 
 ### Question 8
 
+Which of the following is **_NOT_** available in the Components Object?
+
+- [ ] Headers
+- [ ] Parameters
+- [x] Servers
+- [ ] Path Items
+
 ### Question 9
 
+Which if the following is **_NOT_** a supported Security Scheme in OpenAPI?
+
+- [x] SAML
+- [ ] API Key
+- [ ] Basic Authentication
+- [ ] Mutual TLS
+
 ### Question 10
+
+What feature of OpenAPI can you use to extend the specification?
+
+- [x] Specification Extension
+- [ ] Markdown
+- [ ] JSON Schema
+- [ ] Remote References
