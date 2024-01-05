@@ -46,7 +46,7 @@ These mappings demonstrate the strong association between HTTP and OpenAPI and t
 At an implementation level OpenAPI also uses a number of supporting technologies that provide the underpinnings of the specification:
 
 - JSON/YAML: An OpenAPI document is written in JSON or YAML (both are supported as first class citizens).
-- JSON Schema: JSON Schema is used to provide the means to define the properties of an object - termed a **Schema Object - **for request and response payloads.
+- JSON Schema: JSON Schema is used to provide the means to define the properties of an object - defined as a **[Schema Object](https://spec.openapis.org/oas/v3.1.0#schema-object)** in OpenAPI - for request and response payloads and for defining types for parameters and headers.
 - Markdown: [CommonMark](https://commonmark.org/) provides the syntax for adding description to the document intended for human beings to read.
 
 The features therefore provide the fundamentals of both how an OpenAPI document is structured and the affordances other technologies provide in terms of turning the model into a usable API description document.
@@ -141,7 +141,7 @@ We can explain the features as follows:
 - Each Path Item Object has one-or-more [Operation Objects](https://spec.openapis.org/oas/latest.html#operation-object). These provide the HTTP Methods that are supported at the URI.
 - Each Operation, as well identifying the supported HTTP provides summary and description information and tags, then references one-or-more parameters expressed as [Parameter Objects](https://spec.openapis.org/oas/latest.html#parameter-object), and [Request]() and [Response Objects](https://spec.openapis.org/oas/latest.html#response-object) encapsulated with [Media Type Objects](https://spec.openapis.org/oas/latest.html#media-type-object). Responses are referenced through a map of possible HTTP return codes, with a `default` option that can be provided as a catchall as shown in the code snippet.
 
-It's worth noting that at version 3.1 of OpenAPI a Path Item Object can be reused directly i.e. a given combination of URL, method, parameter and request/response body can be defined in the `pathItems` property. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a health-check endpoint across all APIs and resolve them to a given Path Item Object to the correct definition. This feature has considerable power for creating organization-wide templates for purposes of reusability, and is discussed in more detail [below](#defining-reusable-components).
+It's worth noting that at version 3.1 of OpenAPI a Path Item Object can be reused directly i.e. a given combination of URL, method, parameter and request/response body can be defined in the `pathItems` property in the Components Object. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a health-check endpoint across all APIs and resolve them to a given Path Item Object to the correct definition. This feature has considerable power for creating organization-wide templates for purposes of reusability, and is discussed in more detail [below](#defining-reusable-components).
 
 ## Providing Parameters
 
@@ -165,7 +165,7 @@ schema:
   type: string
 ```
 
-The `petId` parameter is specified as a Path parameter, provided with a description, whether it is mandatory or optional, and is declared with a type definition that specifies the data type of the parameter. API consumers can therefore easily understand and implement parameter handling for the APIs they consume.
+The `petId` parameter is specified as a Path parameter, provided with a description, whether it is mandatory or optional, and is declared with a type definition using a Schema Object that specifies the data type of the parameter. API consumers can therefore easily understand and implement parameter handling for the APIs they consume.
 
 ## Creating Request and Response Objects
 
@@ -213,29 +213,58 @@ properties:
     maxItems: 5
 ```
 
-From this simple example we can see how JSON Schema allows us to quickly build up a picture of the data we expect to receive or return at our API.
+From this simple example we can see how JSON Schema allows us to quickly build up a picture of the data we expect to receive or return at our API. We can then create a Request Body or Response Object by enclosing the Schema Object in a Media Type Object. For example, a Request Body Object that is expected to be received in JSON can be defined as follows based on the snippet above:
 
-## Describing Security Requirements
+```yaml
+description: Request body containing expected strings
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^\w$
+          maxItems: 5
+```
 
-The context of our course so far has been largely that of the increasing popularity of Web APIs and as a consequence the growth of the API Economy. In this context the security of a provider’s APIs is of paramount importance as a breach could result in significant financial loss. This is especially true in verticals like financial services where API traffic accounts for an increasing proportion of payment instructions.
+Whilst a Response Object can be defined as follows, which includes expected response HTTP headers:
 
-The OpenAPI specification therefore provides the means to reflect security details through an API description document. Such features are over-and-above that provided by core HTTP as security protocols are typically built on top of the transport mechanism.
+```yaml
+description: Response payload including expected HTTP headers
+headers:
+  "x-example-header":
+    description: Example header using deprecated x- nomenclature
+    schema:
+      type: string
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^\w$
+          maxItems: 5
+```
 
-OpenAPI currently provides support for five different security schemes through the **[Security Scheme Object](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#security-Scheme-Object)**, which include the following:
+The use of Schema Objects is not restricted solely to Request and Response payloads. They are used, for example, to define schema definitions for Parameter Objects as well. Being able to leverage JSON Schema to define such requirements is important across OpenAPI.
 
-- **API Key** (`apiKey`): API keys are a popular means for providing a coarse-grained security credential to API consumers. Whilst the popularity of API keys has waned somewhat - largely due to the fact they are not protocol-bound and therefore not standardized and because they provide limited proofs-of-possession - they continue to be provided in OpenAPI.
-- **HTTP** (`http`): HTTP provides a pointer to any valid security scheme in the [IANA Authentication Scheme registry](https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml). Whilst there are a number of entries in this registry, probably the most popular are [Basic Authentication](https://www.rfc-editor.org/rfc/rfc7617.html) - essentially a username and password - and [Bearer Tokens](https://www.rfc-editor.org/rfc/rfc6750.html) in the context of OAuth 2.0.
-- **Mutual TLS** (`mutualTLS`): Mutual TLS is a security mechanism that is popular in financial service APIs as it enforces the verification of x509 certificates at both the client and the server. OpenAPI provides limited built-in metadata for this Security Scheme, and API providers must provide additional details to describe specifics like accepted certificate authorities and supported ciphers.
-- **OAuth 2.0** (`oauth2`): OAuth 2.0 is a fundamental building block of the API Economy as it facilitates allowing users - real human beings - to delegate their access to a third party at a given service provider. It is therefore well represented in OpenAPI, with the means to describe the [most important](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields-24) OAuth flows.
-- **OpenID Connect** (`openIdConnect`): Support for OpenID Connect is supported in providing a link to the OpenID Connect Discovery metadata. Whilst this in itself does not provide much in the way of rich metadata it provides a pointer to a very rich document that can be programmatically parsed, allowing API consumers to access and act on this information in their applications in an automated manner.
+The important thing to note in the context of the examples above is that an API provider can support more than one content type, perhaps adding `text/xml` to the payload encoding they support. In such cases declaring the Schema Object inline for each Media Type is suboptimal, and a reusable definition is useful. This stands across the vast majority of OpenAPI objects, and object reuse is therefore an important topic.
 
-It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements are applied to a given Operation or to the entire API (as they can be specified at the root level of the OpenAPI document). API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI.
+## Defining Reusable Objects
 
-However, OpenAPI still provides a strong indicator of the security requirement and with the judicious use of descriptions and pointers to other external resources it still serves to provide a comprehensive description of the API for consumers.
+So far we've focused on describing properties in the context of where they are used _inline_ within an OpenAPI document (there are examples of reuse in the snippets above, but we don't discuss them). There is, however, many very strong use cases for creating reusable object definitions. This is where the [Components Object](https://spec.openapis.org/oas/latest.html#components-object) comes in.
 
-## Defining Reusable Components
-
-So far we've focused on describing properties in the context of where they are used _inline_ within an OpenAPI document. There is, however, many very strong use cases for creating reusable object definitions. This is where the [Components Object](https://spec.openapis.org/oas/latest.html#components-object) comes in. The Components Object provides a standardized location for storing reusable objects.
+The Components Object provides a standardized location for storing reusable objects.
 
 The available properties are as follows (not all of which are described above):
 
@@ -293,11 +322,85 @@ components:
 
 This approach stands true for all objects that the Components object supports. References can also be remote, meaning external OpenAPI documents (or JSON Schema document) can be referenced. This feature has immense power, especially in our use case of a standardized health check object; organizations can define the required object once and then reference it from all APIs. Such an approach - when coupled with linting using relevant tools - can provide design-time governance for APIs.
 
+## Describing Security Requirements
+
+The context of our course so far has been largely that of the increasing popularity of Web APIs and as a consequence the growth of the API Economy. In this context the security of a provider’s APIs is of paramount importance as a breach could result in significant financial loss. This is especially true in verticals like financial services where API traffic accounts for an increasing proportion of payment instructions.
+
+The OpenAPI specification therefore provides the means to reflect security details through an API description document. Such features are over-and-above that provided by core HTTP as security protocols are typically built on top of the transport mechanism.
+
+OpenAPI currently provides support for five different security schemes through the **[Security Scheme Object](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#security-Scheme-Object)**, which include the following:
+
+- **API Key** (`apiKey`): API keys are a popular means for providing a coarse-grained security credential to API consumers. Whilst the popularity of API keys has waned somewhat - largely due to the fact they are not protocol-bound and therefore not standardized and because they provide limited proofs-of-possession - they continue to be provided in OpenAPI.
+- **HTTP** (`http`): HTTP provides a pointer to any valid security scheme in the [IANA Authentication Scheme registry](https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml). Whilst there are a number of entries in this registry, probably the most popular are [Basic Authentication](https://www.rfc-editor.org/rfc/rfc7617.html) - essentially a username and password - and [Bearer Tokens](https://www.rfc-editor.org/rfc/rfc6750.html) in the context of OAuth 2.0.
+- **Mutual TLS** (`mutualTLS`): Mutual TLS is a security mechanism that is popular in financial service APIs as it enforces the verification of x509 certificates at both the client and the server. OpenAPI provides limited built-in metadata for this Security Scheme, and API providers must provide additional details to describe specifics like accepted certificate authorities and supported ciphers.
+- **OAuth 2.0** (`oauth2`): OAuth 2.0 is a fundamental building block of the API Economy as it facilitates allowing users - real human beings - to delegate their access to a third party at a given service provider. It is therefore well represented in OpenAPI, with the means to describe the [most important](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields-24) OAuth flows.
+- **OpenID Connect** (`openIdConnect`): Support for OpenID Connect is supported in providing a link to the OpenID Connect Discovery metadata. Whilst this in itself does not provide much in the way of rich metadata it provides a pointer to a very rich document that can be programmatically parsed, allowing API consumers to access and act on this information in their applications in an automated manner.
+
+Each of these can be applied to a given Operation Object, or defined globally at the root level of the OpenAPI document. The Petstore example has been amended in the snippet below, and shows how HTTP Basic Authentication is required globally, but an API key is required specifically for a `get` on the `/pets/{petId}` Path Item:
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Petstore Snippet
+  version: 0.0.1
+security:
+  - basicAuth: []
+paths:
+  /pets/{petId}:
+    get:
+      security:
+        - apiKey: []
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Pet:
+      type: object
+    Error:
+      type: object
+  securitySchemes:
+    apiKey:
+      description: API Key
+      type: apiKey
+      name: api-key
+      in: header
+    basicAuth:
+      description: Basic Authentication
+      type: http
+      scheme: basic
+```
+
+It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements. API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI.
+
+However, OpenAPI still provides a strong indicator of the security requirement and, with the judicious use of descriptions and pointers to other external resources, it still serves to provide a comprehensive description of the API for consumers.
+
 ## Using Specification Extensions
 
 The last feature of OpenAPI that needs mentioning at this point is [Specification Extensions](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#specification-Extensions). This object provides the means for implementers or API providers to follow a standardized pattern for extending the OpenAPI specification. They can provide additional properties in the OpenAPI document, prefixed with `x-`, to denote that the property is not a core OpenAPI property. This allows tooling makers to easily identify Specification Extensions and ignore them where they do not support them or are not relevant.
 
-This is useful where, for example, a vendor can provide arguments that are not covered in the core specification for configuring their tools. Taking an example from an OpenAPI member, SmartBear provides extensions in their [SwaggerHub product](https://support.smartbear.com/swaggerhub/docs/en/manage-apis/swaggerhub-vendor-extensions.html) to enhance certain features of the product, including integrating SwaggerHub with external API gateway providers.
+This is useful where, for example, a vendor can provide arguments that are not covered in the core specification for configuring their tools. Taking an example from an OpenAPI member, SmartBear provides extensions in their [SwaggerHub](https://support.smartbear.com/swaggerhub/docs/en/manage-apis/swaggerhub-vendor-extensions.html) product to enhance certain features of the product, including integrating SwaggerHub with external API gateway providers.
 
 Guidance for this feature is relatively-limited in the specification itself as it is used at the behest of specification implementers. It can provide, however, a very powerful means for extending OpenAPI whilst preserving the core of the specification.
 
