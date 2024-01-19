@@ -1,4 +1,4 @@
-# Contributing Guide
+# Contributing Guide
 
 This is a guide to contributing to course content. Contributing in this context means:
 
