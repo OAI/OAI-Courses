@@ -1,8 +1,8 @@
 # OpenAPI Fundamentals
 
-A course designed to provide an overview of OpenAPI, from the bare essentials to extending OpenAPI and Special Interest Groups
+This course is designed to provide an overview of OpenAPI v3.1, from the bare essentials to extending OpenAPI and Special Interest Groups.
 
-## Table of Contents
+## Course Materials
 
 - Module 1 - Introducing OpenAPI:
   - [Script](module-1-introducing-openapi.md)
@@ -13,11 +13,32 @@ A course designed to provide an overview of OpenAPI, from the bare essentials to
 - Module 3 - Creating an OpenAPI document
 - Module 4 - Extending OpenAPI
 
+## Status
+
+- Module 1
+  - [x] Drafted
+  - [ ] Community review complete
+  - [ ] Final version published
+- Module 2
+  - [x] Drafted
+  - [ ] Community review complete
+  - [ ] Final version published
+- Module 3
+  - [x] Drafted
+  - [ ] Community review complete
+  - [ ] Final version published
+- Module 4
+  - [x] Drafted
+  - [ ] Community review complete
+  - [ ] Final version published
+
 ## Outline
+
+The following sections provide an outline of the course modules.
 
 ### Introducing OpenAPI
 
-Understand the history of OpenAPI, its raison d’etre and its place in the API economy.
+Understand the history of OpenAPI, its raison d’etre, and its place in the API economy.
 
 #### Topics
 
@@ -36,7 +57,7 @@ Understand the basic structure of an OpenAPI document and how it reflects APIs p
 - HTTP, APIs and OpenAPI
 - Basic Structure
 - Providing Information
-- URLs, Paths and Methods
+- URLs, Paths, and Methods
 - Providing Parameters
 - Creating Request and Response Objects
 - Defining Reusable Objects

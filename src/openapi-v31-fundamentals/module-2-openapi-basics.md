@@ -24,7 +24,7 @@ The latest version, [3.1](https://spec.openapis.org/oas/latest.html), was publis
 
 A new major version, currently codenamed Moonwalk, is [being developed](https://www.openapis.org/blog/2023/12/06/openapi-moonwalk-2024) with the goal of general availability in 2024. At the time of writing the construct of this version have yet to be agreed upon.
 
-For the purposes of this module wherever we refer to OpenAPI we mean version 3.1. Regardless of the version, however, the features of HTTP that are mirrored in the structure of OpenAPI. This is a fundamental point of the specification language that we should consider in more detail.
+In this module wherever we refer to OpenAPI we mean version 3.1. Regardless of the version, however, the features of HTTP that are mirrored in the structure of OpenAPI. This is a fundamental point of the specification language that we should consider in more detail.
 
 ## HTTP, APIs and OpenAPI
 
