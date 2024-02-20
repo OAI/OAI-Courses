@@ -392,7 +392,7 @@ components:
       scheme: basic
 ```
 
-It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements. API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI.
+It should be noted that these Security Scheme Object definitions are relatively coarse-grained, and provide only the basic information to indicate what security requirements. API providers need to provide more information - especially around onboarding and credential rotation - that sits outside the scope of OpenAPI. You should also note the relevance of the empty array in Security Requirement objects. This is populated for OAuth Flow and OpenID Connect objects to provide the scopes that apply to the Operation. An empty array is provided in all other cases.
 
 However, OpenAPI still provides a strong indicator of the security requirement and, with the judicious use of descriptions and pointers to other external resources, it still serves to provide a comprehensive description of the API for consumers.
 
