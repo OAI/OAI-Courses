@@ -87,10 +87,10 @@ Demonstrate the creation of OpenAPI using both Code-first and Design-first metho
   - Example in Swagger Editor
 - Code-first approach:
   - Example in Python using Flask
-  - Example in Java using Springboot
+  - Example in Java using Spring Boot
 - What approach fits your needs?
 
-### Module 4: Using an OpenAPI document
+### Module 4: Using an OpenAPI document
 
 - What can you do with an OpenAPI document
   - Introduce the concept of an API lifecycle
@@ -109,6 +109,7 @@ Show how OpenAPI underpins tools and extensions to the specification
 - Introduce the (exceedingly common) concept of extending standards
 - Using Specification Extensions
 - Examples of implementing specification extensions (_use members who are vendors to show these in action_)
-- How Special Interest Groups (SIG) extend OpenAPI
+- Other specifications and Special Interest Groups (SIG) extend OpenAPI
 - Examples of SIG work
+  - [Overlays](https://github.com/OAI/Overlay-Specification)
   - [Workflows SIG](https://github.com/OAI/sig-workflows)
