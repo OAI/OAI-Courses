@@ -20,7 +20,7 @@ As we touched on in Module 1 there has been a number of OpenAPI versions.
 
 The first, Swagger, was retrospectively labelled 2.0 after it was donated by SmartBear. This became the baseline for 3.0, which was published in 2017.
 
-The latest version, [3.1](https://spec.openapis.org/oas/latest.html), was published February 2021.
+The latest version, [3.1](https://spec.openapis.org/oas/v3.1.0.html), was published February 2021.
 
 A new major version, currently codenamed Moonwalk, is [being developed](https://www.openapis.org/blog/2023/12/06/openapi-moonwalk-2024) with the goal of general availability in 2024. At the time of writing the construct of this version have yet to be agreed upon.
 
@@ -65,7 +65,7 @@ We’ll look at each of these in more detail as we progress through the module.
 
 ## Providing Information
 
-It’s no surprise that providing information to end users of an API description document is served by the **[Info Object](https://spec.openapis.org/oas/latest.html#info-object)**. It provides the means to describe high-level information including the title, summary and description information that applies to the entire API and other usage aspects such as the license and the terms of service.
+It’s no surprise that providing information to end users of an API description document is served by the **[Info Object](https://spec.openapis.org/oas/v3.1.0.html#info-object)**. It provides the means to describe high-level information including the title, summary and description information that applies to the entire API and other usage aspects such as the license and the terms of service.
 
 The Info Object also provides a **version property**, which allows API providers to label a given document with a version number, often using [Semantic Versioning](https://semver.org/). This is an important feature of OpenAPI as it provides a standardized location for providing a clear and unequivocal “stamp” that allies a given OpenAPI document to the operations, behaviors and data that an API consumer will expect to find at a provider’s API.
 
@@ -102,7 +102,7 @@ The Info Object, whilst appearing at face value to hold only cursory information
 
 ## URLs, Paths and Methods
 
-The next and most significant section in the OpenAPI document is the **[Paths Object](https://spec.openapis.org/oas/latest.html#paths-object)**. The Paths Object is the key resource in an OpenAPI document in that in allies a given URL and HTTP method to one-or-more operations.
+The next and most significant section in the OpenAPI document is the **[Paths Object](https://spec.openapis.org/oas/v3.1.0.html#paths-object)**. The Paths Object is the key resource in an OpenAPI document in that in allies a given URL and HTTP method to one-or-more operations.
 
 Taking the classic Petstore API example below:
 
@@ -137,9 +137,9 @@ Taking the classic Petstore API example below:
 
 We can explain the features as follows:
 
-- Paths is a Map that uses a URI to identify a given [Path Item Object](https://spec.openapis.org/oas/latest.html#path-item-object). In the code snippet the URI `/pets/{petId}` is identified, which a Client must call to invoke one of the supported methods (Note that fragments of the URL in this example are placeholders - Path Templates - for parameter values, which we'll discuss in a [later section](#providing-parameters)).
-- Each Path Item Object has one-or-more [Operation Objects](https://spec.openapis.org/oas/latest.html#operation-object). These provide the HTTP Methods that are supported at the URI.
-- Each Operation, as well identifying the supported HTTP provides summary and description information and tags, then references one-or-more parameters expressed as [Parameter Objects](https://spec.openapis.org/oas/latest.html#parameter-object), and [Request]() and [Response Objects](https://spec.openapis.org/oas/latest.html#response-object) encapsulated with [Media Type Objects](https://spec.openapis.org/oas/latest.html#media-type-object). Responses are referenced through a map of possible HTTP return codes, with a `default` option that can be provided as a catchall as shown in the code snippet.
+- Paths is a Map that uses a URI to identify a given [Path Item Object](https://spec.openapis.org/oas/v3.1.0.html#path-item-object). In the code snippet the URI `/pets/{petId}` is identified, which a Client must call to invoke one of the supported methods (Note that fragments of the URL in this example are placeholders - Path Templates - for parameter values, which we'll discuss in a [later section](#providing-parameters)).
+- Each Path Item Object has one-or-more [Operation Objects](https://spec.openapis.org/oas/v3.1.0.html#operation-object). These provide the HTTP Methods that are supported at the URI, with each being uniquely identified in a given OpenAPI document with the property `operationId`.
+- Each Operation, as well identifying the supported HTTP provides summary and description information and tags, then references one-or-more parameters expressed as [Parameter Objects](https://spec.openapis.org/oas/v3.1.0.html#parameter-object), and [Request]() and [Response Objects](https://spec.openapis.org/oas/v3.1.0.html#response-object) encapsulated with [Media Type Objects](https://spec.openapis.org/oas/v3.1.0.html#media-type-object). Responses are referenced through a map of possible HTTP return codes, with a `default` option that can be provided as a catchall as shown in the code snippet.
 
 It's worth noting that at version 3.1 of OpenAPI a Path Item Object can be reused directly i.e. a given combination of URL, method, parameter and request/response body can be defined in the `pathItems` property in the Components Object. There are instances where this might be desirable. For example, an organisation may choose to template their definition for a health-check endpoint across all APIs and resolve them to a given Path Item Object to the correct definition. This feature has considerable power for creating organization-wide templates for purposes of reusability, and is discussed in more detail [below](#defining-reusable-components).
 
@@ -147,11 +147,11 @@ It's worth noting that at version 3.1 of OpenAPI a Path Item Object can be reuse
 
 URLs, Paths and Methods are, however, only part of how API providers typically define the operations supported by their API. Parameters - of different kinds - are critical to allowing API consumers to invoke a given operation with the correct arguments. In HTTP terms we generally understand parameters are represented in a [Query](https://datatracker.ietf.org/doc/html/rfc3986#section-3.4), with parameters passed that can influence the retrieval of information from the URL in question.
 
-In OpenAPI the idea of parameters is extended to incorporate other means to pass information when invoking an operation through the [Parameter Object](https://spec.openapis.org/oas/latest.html#parameter-object). OAS specifics four types of parameter, namely:
+In OpenAPI the idea of parameters is extended to incorporate other means to pass information when invoking an operation through the [Parameter Object](https://spec.openapis.org/oas/v3.1.0.html#parameter-object). OAS specifics four types of parameter, namely:
 
 - **Path**: A part of the URL, denoted using handlebar syntax in the Path Item Map. The specification provides the example `/items/{itemId}`, with the Petstore example being defined as above as `/pets/{petId}`. In practical terms what this means for an API consumer is that this value **_can change_** at each invocation of given operation, and the consumer needs to pass the appropriate information relevant to the context of the invocation i.e. to retrieve information on a given item or pet in our examples. APIs that follow the REST architectural style will most likely make extensive use of Path Parameters, using them to identify a given resource in a collection of resources.
 - **Query**: Query Parameters reflect the Query string as described above. API providers often specify query parameters as optional arguments that can be used to modify the behaviours of a given operation. An oft-quoted example is for filtering a collection of resources when addressing a collection like `/pets`. An API provider might allow retrieval of all Pets, but provide the query parameter `petType` so API consumers can retrieve pets of a given type - Cat, Dog, etc. Variations on this theme are myriad.
-- **Header**: Header parameters are [HTTP headers](https://httpwg.org/specs/rfc7230.html#header.fields), specifically request parameters in this context. Headers can also be defined [elsewhere](https://spec.openapis.org/oas/latest.html#header-object) and be referenced in an [Encoding Object](https://spec.openapis.org/oas/latest.html#encoding-object).
+- **Header**: Header parameters are [HTTP headers](https://httpwg.org/specs/rfc7230.html#header.fields), specifically request parameters in this context. Headers can also be defined [elsewhere](https://spec.openapis.org/oas/v3.1.0.html#header-object) and be referenced in an [Encoding Object](https://spec.openapis.org/oas/v3.1.0.html#encoding-object).
 - **Cookie**: Cookie are also supported, allowing cookie data to be specified as a parameter.
 
 In all cases a Parameter Object defines the attributes of the parameter in question. Taking the Petstore example above:
@@ -262,7 +262,7 @@ The important thing to note in the context of the examples above is that an API 
 
 ## Defining Reusable Objects
 
-So far we've focused on describing properties in the context of where they are used _inline_ within an OpenAPI document (there are examples of reuse in the snippets above, but we don't discuss them). There is, however, many very strong use cases for creating reusable object definitions. This is where the [Components Object](https://spec.openapis.org/oas/latest.html#components-object) comes in.
+So far we've focused on describing properties in the context of where they are used _inline_ within an OpenAPI document (there are examples of reuse in the snippets above, but we don't discuss them). There is, however, many very strong use cases for creating reusable object definitions. This is where the [Components Object](https://spec.openapis.org/oas/v3.1.0.html#components-object) comes in.
 
 The Components Object provides a standardized location for storing reusable objects.
 
@@ -279,7 +279,7 @@ The available properties are as follows (not all of which are described above):
 - Schemas.
 - Security Schemes.
 
-In our Petstore snippet [above](#urls-paths-and-methods) we already show how Component properties can be referenced, namely by using a [Reference Object](https://spec.openapis.org/oas/latest.html#referenceObject) which is supported by [rules](https://spec.openapis.org/oas/latest.html#relativeReferencesURI) for resolving URIs. If we were to template the Path Item above - because reusing this object has value - the example can be refactored as follows (using placeholders for the Schema Objects):
+In our Petstore snippet [above](#urls-paths-and-methods) we already show how Component properties can be referenced, namely by using a [Reference Object](https://spec.openapis.org/oas/v3.1.0.html#referenceObject) which is supported by [rules](https://spec.openapis.org/oas/v3.1.0.html#relativeReferencesURI) for resolving URIs. If we were to template the Path Item above - because reusing this object has value - the example can be refactored as follows (using placeholders for the Schema Objects):
 
 ```yaml
 paths:
@@ -408,7 +408,7 @@ Guidance for this feature is relatively-limited in the specification itself as i
 
 In this module we’ve learnt the fundamentals of OpenAPI include the basis of the structure, how it relates to HTTP and other technologies that support the delivery of the specification itself. We’ve also looked at API security and how it is expressed in the specification and at what Specification Extensions are with an example of how they can be used.
 
-Our list isn't exhaustive. For example, we've not taken a look at the [Server Object](https://spec.openapis.org/oas/latest.html#server-object), which provides details on where a given API is available or the [Link Object](https://spec.openapis.org/oas/latest.html#link-object) that provides links between a given response and a subsequent request. This is for good reason. What we've discussed are core features of OAS, while the examples quoted are either implemented much less often or offer functionality that has had mixed success when used by API providers or supported by tooling makers. As version 4 of OpenAPI evolves we'll revisit our course content and offer revisions that take the same approach, highlighting the most frequently-used features and offering appropriate guidance on their implementation.
+Our list isn't exhaustive. For example, we've not taken a look at the [Server Object](https://spec.openapis.org/oas/v3.1.0.html#server-object), which provides details on where a given API is available or the [Link Object](https://spec.openapis.org/oas/v3.1.0.html#link-object) that provides links between a given response and a subsequent request. This is for good reason. What we've discussed are core features of OAS, while the examples quoted are either implemented much less often or offer functionality that has had mixed success when used by API providers or supported by tooling makers. As version 4 of OpenAPI evolves we'll revisit our course content and offer revisions that take the same approach, highlighting the most frequently-used features and offering appropriate guidance on their implementation.
 
 In our next module we’ll look at the specification in more practical terms. We will cover the two most salient API design methodologies and describe the implications of each, with practical examples of how API providers use them to deliver a fully-featured API description document to their API consumers.
 
