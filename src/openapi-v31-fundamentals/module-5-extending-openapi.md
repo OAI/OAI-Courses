@@ -129,7 +129,7 @@ _"...propose an enhancement to the current OpenAPI, or accompanying specificatio
 
 This goal has manifested itself in version 1.0.0 _(release candidate)_ of the [Workflows Specification](https://github.com/OAI/sig-workflows/blob/main/versions/1.0.0.md). API providers can use this specification to provide a schematic representation of how to call several APIs and link them together using the data returned. Each Workflow document references one-or-more source documents, which at version 1.0.0 can either be an OpenAPI document or a Workflow document.
 
-The specification itself shows a simple example. A [Workflow Object](https://github.com/OAI/sig-workflows/blob/main/versions/1.0.0.md#workflow-object) defines the workflow itself and any inputs external to sequence of API calls (note multiple Workflow objects can defined, hence the object is an array):
+The specification itself shows a simple example. A [Workflow Object](https://github.com/OAI/sig-workflows/blob/main/versions/1.0.0.md#workflow-object) defines the workflow itself and any inputs external to sequence of API calls (note multiple Workflow objects can be defined, hence the object is an array):
 
 ```yaml
 - workflowId: loginUserAndRetrievePet
