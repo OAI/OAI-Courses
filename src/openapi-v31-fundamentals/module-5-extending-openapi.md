@@ -174,7 +174,7 @@ To annotate the example:
 
 - The step provides the list of parameters required to call the step. The input parameters, `username` and `password` are required to initiate the workflow.
 - It also defines the `successCriteria` property, which provides one-or-more `condition` properties that describe what success execution looks like.
-- The `outputs` property defines what is required to call a subsequent step, using Runtime Expressions to define the required values. These properties are named so they can be easily referenced.
+- The `outputs` property defines dynamic values, using Runtime Expressions, that are accessible for subsequent steps (maybe even required to call a subsequent step) within the same workflow. The outputs are named so they can be easily referenced.
 
 The Workflow consumer can then call the `getPetStep` to get the details of a given Pet:
 
