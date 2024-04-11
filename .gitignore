@@ -1,2 +1,5 @@
 .vscode/
 build/
+venv/
+__pycache__/
+*.docx

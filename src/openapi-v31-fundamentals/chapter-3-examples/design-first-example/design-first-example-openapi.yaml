@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI v3.1 Fundamentals API
+  description: A stripped-down version of the Petstore API for the OpenAPI v3.1 Fundamentals course.
+  version: 1.0.0
+tags:
+  - name: GET
+    description: HTTP GET operations
+  - name: POST
+    description: HTTP POST operations
+  - name: Read
+    description: Retrieve the properties of one-or-more Pets
+  - name: Write
+    description: Create or update a Pet
+security:
+  - apiKey: []
+paths:
+  /pets:
+    get:
+      summary: Retrieve all Pets
+      description: Retrieve all Pets in the collection
+      operationId: GetAllPets
+      tags:
+      - GET
+      - Read
+      responses:
+        "200":
+          description: List of pets provided at the Petstore
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: "#/components/schemas/Pet"
+        default:
+          description: Non-specific HTTP response code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a Pet
+      description: Add a new Pet to the collection
+      operationId: CreatePet
+      tags:
+      - POST
+      - Write
+      requestBody:
+        description: New Pet properties
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+               - name
+              properties:
+                name:
+                  $ref: '#/components/schemas/PetName'
+                type:
+                  $ref: '#/components/schemas/PetType'
+      responses:
+        "201":
+          description: New Pet properties
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: Non-specific HTTP response code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /pets/{petId}:
+    get:
+      summary: Retrieve a Pet
+      description: Retrieve a Pet from the collection
+      operationId: GetAPet
+      tags:
+        - GET
+        - Read
+      responses:
+        "200":
+          description: Properties of Pet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: Non-specific HTTP response code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    PetName:
+      description: The name of the Pet
+      type: string
+    PetType:
+      description: The category of the Pet
+      type: string
+    Pet:
+      description: Properties of a Pet
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          description: The unique identifier for a Pet
+          type: integer
+          format: int64
+        name:
+          $ref: '#/components/schemas/PetName'
+        tag:
+          $ref: '#/components/schemas/PetType'
+    Error:
+      description: An error object. Provides a code identifying the error and optional message
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          description: The error code. Defined separately to the HTTP response code
+          type: integer
+          format: int32
+        message:
+          description: An optional error message provide more detailed information for humans
+          type: string
+  securitySchemes:
+    apiKey:
+      description: API key as provided in Petstore portal
+      type: apiKey
+      in: header
+      name: api-key

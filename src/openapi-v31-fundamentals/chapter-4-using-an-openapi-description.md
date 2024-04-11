@@ -4,24 +4,13 @@
 
 ### Chapter Overview
 
-Welcome to our course chapter "Using an OpenAPI description".
+OpenAPI descriptions provided by API providers can be used by API consumers in a number of different ways, many of which can be qualified in the stages of the API lifecycle we introduced in Chapter 3.
 
-In chapter 3 we looked at how you can create your OpenAPI descriptions using either a design-first or a code-first approach. This hopefully gave you more insight into how OpenAPI descriptions are structured, and some perspective on the trade-offs between different approaches.
-
-In this chapter we look at how we can take the output of either approach to creating an OpenAPI description and how we can use it practically.
-
-We look at:
-
-- Use cases in the context of the API lifecycle.
-- Generating documentation through OpenAPI.
-- Using an OpenAPI description to generate an API client.
-- Applying governance through OpenAPI using a linter.
-
-OpenAPI allows API providers to describe their APIs, using either a design-first or a code-first approach to create an OpenAPI description. This description allows API consumers to understand the construct of a given API
+Activities API consumers can use an OpenAPI description for include generating documentation, generating an API client, and applying governance to API design. Such activities, when used with an OpenAPI description, support API consumers in performing their roles more accurately and efficiently.
 
 ### Learning Objectives
 
-At the end of the chapter, you should be able to:
+By the end of the chapter you should be able to:
 
 - Understand how OpenAPI supports activities of an API lifecycle.
 - Evaluate how OpenAPI is applied based on several use cases and examples.
@@ -31,7 +20,7 @@ At the end of the chapter, you should be able to:
 
 ### The API Lifecycle
 
-In chapter 3 we introduced a hypothetical API lifecycle created by OAI to explain how OpenAPI can be used throughout the development and deployment of APIs:
+In Chapter 3 we introduced a hypothetical API lifecycle created by OAI to explain how OpenAPI can be used throughout the development and deployment of APIs:
 
 ![OpenAPI API Lifecycle](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
 
