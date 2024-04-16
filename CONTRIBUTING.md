@@ -26,7 +26,6 @@ You've got three options.
 - Fork the repository to your organization in GitHub.
 - Perform your review:
   - For Markdown changes simply change the file and do whatever you do for checking a pushing back to your fork.
-  - For PowerPoint make your changes and **add a Comment in the file indicating the reason for the change**.
   - For any other assets - images, etc. - just go ahead and commit the new asset.
 - Create a pull request based on the review pull request template.
 - Add [sensiblewood](https://github.com/SensibleWood) as a reviewer.
