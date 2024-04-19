@@ -1,12 +1,14 @@
 # Extending OpenAPI
 
-## Chapter Overview
+## Introduction
+
+### Chapter Overview
 
 The OpenAPI Specification is the principal standard delivered by the OpenAPI Initiative (OAI). It is not, however, the only standard that falls under the OAI umbrella. There are a number of other standards that provide additional functionality important to both the API community and the tooling makers that support it.
 
 The Specification also supports a standardized mechanism for extending the OpenAPI Specification itself, which is commonly used by tooling makers to support specific functionality for the tools they provide. Using Specification Extensions provides a structured and deterministic way to deliver the description they need to support their communities.
 
-## Learning Objectives
+### Learning Objectives
 
 By the end of this chapter you should understand:
 
@@ -19,13 +21,13 @@ By the end of this chapter you should understand:
 
 ### What are Specification Extensions?
 
-[Specification Extensions](https://spec.openapis.org/oas/v3.1.0.html#specification-extensions) are a feature of the OpenAPI specification we have not covered in our earlier chapters because their application is so wide. They provide a structured approach to extending a given OpenAPI document and can be used in virtually any object. They allow API providers and tooling makers to add their own customizations that complements their use cases or products.
+[Specification Extensions](https://spec.openapis.org/oas/v3.1.0.html#specification-extensions) are a feature of the OpenAPI specification we have not covered in our earlier chapters because their application is so wide. They provide a structured approach to extending a given OpenAPI description and can be used in virtually any object. They allow API providers and tooling makers to add their own customizations that complements their use cases or products.
 
 Extension property names are always prefixed with `x-`. This indicates that they are not properties of the core OpenAPI specification and therefore should either be ignored or consumed based on a tooling maker or API consumer's understanding of what they represent. Any other guidance in the specification is relatively light as use of this object is left to implementers. The main benefit is to allow OpenAPI to be tailored to specific use cases and scenarios using a deterministic approach.
 
 ### Example: UK Open Banking
 
-The easiest way of showing the utility of Specification Extensions is by exemplar. Take, for example, the UK open banking [Payment Initiation OpenAPI document](https://raw.githubusercontent.com/OpenBankingUK/read-write-api-specs/master/dist/openapi/payment-initiation-openapi.yaml). The specification implements an extension entitled `x-namespaced-enumeration`, which defines a list of values that apply to a given string-based property and are set by the standards body who created the document.
+The easiest way of showing the utility of Specification Extensions is by exemplar. Take, for example, the UK open banking [Payment Initiation OpenAPI description](https://raw.githubusercontent.com/OpenBankingUK/read-write-api-specs/master/dist/openapi/payment-initiation-openapi.yaml). The specification implements an extension entitled `x-namespaced-enumeration`, which defines a list of values that apply to a given string-based property and are set by the standards body who created the document.
 
 The example below shows some of the possible values of the property `ErrorCode` as specified in the standards:
 
@@ -45,7 +47,7 @@ OBError1:
         ...
 ```
 
-A better approach might appear to be to use an `enum` property. However, the appetite of the standards body for breaking changes was low as specifying this list in an `enum` allied to a Response Object may make the OpenAPI document more brittle. This solution allowed the list to be published and be machine-readable, but without resulting in the brittleness that the standards body was trying to avoid. You could argue that this is just semantics and any changes to this list is a breaking change anyway, but it ensures that changes were isolated away from the enum value and therefore not disruptive when consumed by tooling.
+A better approach might appear to be to use an `enum` property. However, the appetite of the standards body for breaking changes was low as specifying this list in an `enum` allied to a Response Object may make the OpenAPI description more brittle. This solution allowed the list to be published and be machine-readable, but without resulting in the brittleness that the standards body was trying to avoid. You could argue that this is just semantics and any changes to this list is a breaking change anyway, but it ensures that changes were isolated away from the enum value and therefore not disruptive when consumed by tooling.
 
 ### Example: Redoc
 
@@ -95,13 +97,13 @@ We'll look at two specifications, namely Overlay and Workflows.
 
 ### Updating OpenAPI Descriptions
 
-The Specification Extensions section showed how, relatively speaking, permissive the OpenAPI format is. However, this openness is something of a curate's egg. It can be difficult to "know" how to deterministically process a given OpenAPI document or to apply updates later in the API lifecycle after the core OpenAPI description has been created. You may also _proactively_ make the decision to update your OpenAPI description later in the API lifecycle as the source-of-truth for some aspect of the description or the team in charge of making updates is not aligned with API designers or developers.
+The Specification Extensions section showed how, relatively speaking, permissive the OpenAPI format is. However, this openness is something of a curate's egg. It can be difficult to "know" how to deterministically process a given OpenAPI description or to apply updates later in the API lifecycle after the core OpenAPI description has been created. You may also _proactively_ make the decision to update your OpenAPI description later in the API lifecycle as the source-of-truth for some aspect of the description or the team in charge of making updates is not aligned with API designers or developers.
 
-Take, for example, the Servers Object we discussed in Module 3. In your API lifecycle you might merge Servers data from an automatically-generated OpenAPI document with information from configuration data represented in OpenAPI format that which is created in DevOps. How do you deterministically process the correct data first? This is an easy decision for human being - as they'll use their judgement - but for tooling makers its more difficult, and leads to opinionated decisions in their implementation. The same is true for many aspects of merging data to be included in an OpenAPI document to be published to your developer community or consumed by tooling. The use cases are varied, and can include adding better tags for navigation in documentation or providing more metadata in order to generate SDKs. It is these challenges that Overlay aims to solve.
+Take, for example, the Servers Object we discussed in Module 3. In your API lifecycle you might merge Servers data from an automatically-generated OpenAPI description with information from configuration data represented in OpenAPI format that which is created in DevOps. How do you deterministically process the correct data first? This is an easy decision for human being - as they'll use their judgement - but for tooling makers its more difficult, and leads to opinionated decisions in their implementation. The same is true for many aspects of merging data to be included in an OpenAPI description to be published to your developer community or consumed by tooling. The use cases are varied, and can include adding better tags for navigation in documentation or providing more metadata in order to generate SDKs. It is these challenges that Overlay aims to solve.
 
 ### Using the Overlay Specification
 
-The [Overlay Specification](https://github.com/OAI/Overlay-Specification/blob/main/versions/1.0.0.md) works by adding a set of imperatives that allow a provider to "instruct" how OpenAPI documents should be merged. This is encapsulated in an [Actions Object](https://github.com/OAI/Overlay-Specification/blob/main/versions/1.0.0.md#action-object) that prescribes the changes to be made, which is described in either an `update` or `remove` property. The instructions are applied using a JSON Path, which point to a given property in the OpenAPI document.
+The [Overlay Specification](https://github.com/OAI/Overlay-Specification/blob/main/versions/1.0.0.md) works by adding a set of imperatives that allow a provider to "instruct" how OpenAPI descriptions should be merged. This is encapsulated in an [Actions Object](https://github.com/OAI/Overlay-Specification/blob/main/versions/1.0.0.md#action-object) that prescribes the changes to be made, which is described in either an `update` or `remove` property. The instructions are applied using a JSON Path, which point to a given property in the OpenAPI description.
 
 The following are two examples from the specification merged into one snippet:
 
@@ -126,7 +128,7 @@ actions:
     remove: true
 ```
 
-The code snippet indicates the OpenAPI document should be updated with new values, namely:
+The code snippet indicates the OpenAPI description should be updated with new values, namely:
 
 - The `description` property at `$.paths['/foo'].get` is updated with a new value.
 - The `description` property at `$.paths['/bar'].get` is updated with a new value.
@@ -135,19 +137,19 @@ The code snippet indicates the OpenAPI document should be updated with new value
 
 ### How Overlay Helps in Updating OpenAPI Descriptions
 
-The snippet demonstrates a **_deterministic_** approach to merging information, and serves the needs of the API lifecycle view of creating and using OpenAPI that we've discussed in modules 3 and 4. Organizations can leverage this specification to update OpenAPI document at different stages in the lifecycle, and always expect consistent results when repeating the lifecycle stages. Overlay therefore serves to take the guesswork out of how to approach this, which should be of considerable benefit to tooling makers and consumers of OpenAPI documents. The key benefit is flexibility, in that organizations can choose to update an OpenAPI description in a manner that suits their needs.
+The snippet demonstrates a **_deterministic_** approach to merging information, and serves the needs of the API lifecycle view of creating and using OpenAPI that we've discussed in modules 3 and 4. Organizations can leverage this specification to update OpenAPI description at different stages in the lifecycle, and always expect consistent results when repeating the lifecycle stages. Overlay therefore serves to take the guesswork out of how to approach this, which should be of considerable benefit to tooling makers and consumers of OpenAPI descriptions. The key benefit is flexibility, in that organizations can choose to update an OpenAPI description in a manner that suits their needs.
 
 Please note that the Overlay Specification is currently an **implementers draft** created to provide a means for the community to test the specification. This course will be updated in the future should any aspect change dramatically.
 
-## Workflow Specification
+## Workflows Specification
 
 ### Describing Sequences of API Calls
 
-In the examples we've looked at throughout this course we've always been looking at a single API described by an OpenAPI document. What about cases where there are multiple APIs and those APIs are linked together to form a use cases or function that requires orchestration? It is for such use cases that the [Workflows SIG](https://github.com/OAI/sig-workflows) was formed. The goal of this SIG is:
+In the examples we've looked at throughout this course we've always been looking at a single API described by an OpenAPI description. What about cases where there are multiple APIs and those APIs are linked together to form a use cases or function that requires orchestration? It is for such use cases that the [Workflows SIG](https://github.com/OAI/sig-workflows) was formed. The goal of this SIG is:
 
 _"...propose an enhancement to the current OpenAPI, or accompanying specification (or means), that can define sequences of calls and their dependencies to be expressed in the context of delivering a particular outcome or set of outcomes."_
 
-This goal has manifested itself in version 1.0.0 _(release candidate)_ of the [Workflows Specification](https://github.com/OAI/sig-workflows/blob/main/versions/1.0.0.md). API providers can use this specification to provide a schematic representation of how to call several APIs and link them together using the data returned. Each Workflow document references one-or-more source documents, which at version 1.0.0 can either be an OpenAPI document or a Workflow document.
+This goal has manifested itself in version 1.0.0 _(release candidate)_ of the [Workflows Specification](https://github.com/OAI/sig-workflows/blob/main/versions/1.0.0.md). API providers can use this specification to provide a schematic representation of how to call several APIs and link them together using the data returned. Each Workflows Description references one-or-more source documents, which at version 1.0.0 can either be an OpenAPI description or a Workflows Description.
 
 ### Describing a Workflow
 
@@ -225,7 +227,7 @@ The Workflow consumer can then call the `getPetStep` to get the details of a giv
 
 ### How Workflows Helps in Making Multiple API Calls
 
-When we compare this to the native OpenAPI Specification we find that the Links object can help, but it lacks the deterministic sequencing model that the Workflows Specification delivers. An API provider or tooling maker would need to use a significant number of Specification Extensions to facilitate this and, as we said earlier, doing this in isolation makes the efforts far less reusable.
+When we compare this to the native OpenAPI Specification we find that the Links object can help, but it lacks the deterministic sequencing model that Workflows delivers. An API provider or tooling maker would need to use a significant number of Specification Extensions to facilitate this and, as we said earlier, doing this in isolation makes the efforts far less reusable.
 
 The Workflows Specification therefore provides a significant uplift for API providers in how to describe sequencing API calls. This will also prove useful to tooling makers who can leverage the specification to provide orchestration features in their software. Finally, and probably most important, the Workflow Specification will provide ease-of-use for API consumers who will be able to orchestrate calls to multiple APIs far more seamlessly.
 
@@ -267,7 +269,7 @@ Ideally, when should you use Specification Extensions?
 - [ ] Never
 - [x] Sparingly, for specific requirements
 - [ ] Sparingly, to help track versions
-- [ ] Always, in every OpenAPI document
+- [ ] Always, in every OpenAPI description
 
 ### Question 5
 
@@ -291,27 +293,27 @@ What do SIGs aim to do?
 
 What does the Overlay Specification do?
 
-- [ ] Provides the means to add graphics to a rendered OpenAPI document
+- [ ] Provides the means to add graphics to a rendered OpenAPI description
 - [ ] Allows RPC-style APIs to be represented in OpenAPI
 - [ ] Allow non-HTTP APIs to be represented in OpenAPI
-- [x] Provides a deterministic way to merge multiple OpenAPI documents
+- [x] Provides a deterministic way to merge multiple OpenAPI descriptions
 
 ### Question 8
 
 What does the Workflows Specification do?
 
-- [ ] Allows OpenAPI documents to be extended with asynchronous operations
+- [ ] Allows OpenAPI descriptions to be extended with asynchronous operations
 - [ ] Provides an alternative approach to documenting asynchronous operations
 - [ ] Describes common enterprise integration patterns
 - [x] Allows a sequence of API calls to be described through a specification language
 
 ### Question 9
 
-How are external parameters specified in a Workflow document?
+How are external parameters specified in a Workflows Description?
 
 - [ ] In the `beforeAll` property at the root of the document
 - [x] In the `parameters` array in the Workflow object
-- [ ] In a source OpenAPI document
+- [ ] In a source OpenAPI description
 - [ ] Using a Specification Extension
 
 ### Question 10
@@ -320,5 +322,5 @@ What source documents can be used in version 1.0.0 of the Workflow Specification
 
 - [ ] OpenAPI and AsyncAPI documents
 - [ ] OpenAPI and JSON Schema documents
-- [x] OpenAPI and Workflow documents
+- [x] OpenAPI and Workflows Descriptions
 - [ ] XML Schema documents

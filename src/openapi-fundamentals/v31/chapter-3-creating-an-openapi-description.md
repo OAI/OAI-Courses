@@ -37,7 +37,7 @@ To show an example of an approach to design-first we are using Swagger Editor, w
 
 When you get there for the first time you'll see the default, expanded version of the Petstore API:
 
-![Petstore API Screenshot](images/swagger-editor-screenshot.png)
+![Petstore API screenshot in Swagger Editor](images/chapter-3-swagger-editor-screenshot.png)
 
 You can clear the pane on the left-hand side and the rendered view of the API will be removed.
 
@@ -239,7 +239,7 @@ tags:
 
 The tags drive the navigation menu on the left-hand side, with the API provider responsible for providing meaningful data so the navigation menu is helpful to the API consumer:
 
-![Redoc Navigation Example](images/redoc-screenshot.png)
+![Example of Tags enabling navigation in Redoc](images/chapter-3-redoc-screenshot.png)
 
 The tags here are used as an example and the way they are structured - so that multiple tags reference a single endpoint - is not the best way of tagging.
 
@@ -616,7 +616,7 @@ Your efforts and how to take the right approach therefore ideally needs to be co
 
 Take the following hypothetical API lifecycle as an example:
 
-![OpenAPI API Lifecycle](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
+![The API lifecycle as imagined by OpenAPI Initiative](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
 
 At each stage there is potentially a need to process a given OpenAPI description, with the wants-and-needs of the API consumer at that stage being different to what the developer adds to the codebase. An API provider needs to be cognizant of the varied audiences and their roles, and cater for how the deal with ensuring the information provided in a given OpenAPI description is as complete as it possibly can be. Most important in this is being aware of the fact that the development team is not necessarily the sole arbiter of the content of an OpenAPI description, and other contributors need to be enabled accordingly.
 

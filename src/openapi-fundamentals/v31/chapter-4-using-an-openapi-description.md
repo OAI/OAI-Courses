@@ -1,14 +1,14 @@
 # Using an OpenAPI description
 
-## Introduction
+## Introduction
 
-### Chapter Overview
+### Chapter Overview
 
 OpenAPI descriptions provided by API providers can be used by API consumers in a number of different ways, many of which can be qualified in the stages of the API lifecycle we introduced in Chapter 3.
 
 Activities API consumers can use an OpenAPI description for include generating documentation, generating an API client, and applying governance to API design. Such activities, when used with an OpenAPI description, support API consumers in performing their roles more accurately and efficiently.
 
-### Learning Objectives
+### Learning Objectives
 
 By the end of the chapter you should be able to:
 
@@ -18,40 +18,35 @@ By the end of the chapter you should be able to:
 
 ## Using an OpenAPI description and the API lifecycle
 
-### The API Lifecycle
+### The API Lifecycle
 
 In Chapter 3 we introduced a hypothetical API lifecycle created by OAI to explain how OpenAPI can be used throughout the development and deployment of APIs:
 
-![OpenAPI API Lifecycle](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
+![The API lifecycle as imagined by OpenAPI Initiative](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
 
 Each stage in this lifecycle is associated with different organizational roles, with a variety of wants and needs from the people partaking in each stage. This determines a great number of use cases for API-related documentation, driven by those activities. Some of these may already be familiar to you, whilst others may be novel in terms of your experiences with APIs.
 
 To draw out some of these we'll look at several common use cases and provide examples of toolsets that show how an OpenAPI description is leveraged to fulfill the use cases.
 
-<blockquote>
-Please note that - being an open format - OpenAPI can be used in a whole myriad of ways depending on the perspective of the API consumer, specific developers, and tooling makers.
+Please note that - being an open format - OpenAPI can be used in a huge number of ways depending on the perspective of the API consumer, specific developers, and tooling makers. We are only covering very common ones here.
 
-We are only covering very common ones here.
+## Generating API Documentation
 
-</blockquote>
-
-## Generating Documentation
-
-### Use Case for Generating Documentation
+### Use Case for Generating API Documentation
 
 Our first use cases is generating documentation, which is a feature of the Publish stage of an API lifecycle. You might question why this is so, given the fact that an OpenAPI description is a document encoded in JSON or YAML with a specific structure.
 
 The inclusion of Markdown in the specification, however, means that `description` properties can be very rich, including formatting and links to graphics. The API structure expressed in OpenAPI therefore provides the spine of the documentation, while Markdown content provides the "meat on the bone". Toolsets have therefore evolved around the specification that use the content of the OpenAPI description to drive the rendering of human-orientated documentation built for browser the operations the API supports
 
-### Example of Generating Documentation
+### Example of Generating API Documentation
 
 You can get a sense of how rich this can by looking at some examples in the wild. Take, for example, Zuora who provide documentation using Redoc. Their [API documentation](https://developer.zuora.com/api-references/api/overview/) is comprehensive, providing developers with everything they need to know about the operations the API supports. It goes without saying that not all the content is embedded in the OpenAPI description as it's too voluminous to manage there. The structure does, however, serve to tie the information together.
 
-### Task
+### Task: Generate API documentation using Redoc
 
 Redoc is an open source tool - you saw a screenshot in chapter 3 - and an easy way to provide and example of generating documentation.
 
-Follow [our example](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/generating-documentation/README.md) of using Redoc with our [design-first OpenAPI description](https://github.com/OAI/OAI-Courses/blob/main/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) if you want to explore publishing documentation in more detail.
+Follow [the example](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/generating-documentation/README.md) of using Redoc with our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) if you want to explore publishing documentation in more detail.
 
 ## Generating an API client
 
@@ -88,13 +83,13 @@ The developer uses the `ApiClient` object to interact with the API, simplifying 
 
 We've picked on generating an API client as a use case, but you can extended the scope of this back into the Configure stage of our API lifecycle. Many tooling vendors - especially those in the API management space - leverage OpenAPI descriptions to configure infrastructure such as API gateways. Typically these will be enhanced with Specification Extensions, which we will cover in chapter 5.
 
-### Task
+### Task: Generating an API Client using Kiota
 
 Kiota supports [a number](https://learn.microsoft.com/en-us/openapi/kiota/quickstarts/) of programming languages.
 
 Use one of the quick-start guides in your choice of programming language to explore generating an API client in more detail.
 
-Use our [design-first OpenAPI description](https://github.com/OAI/OAI-Courses/blob/main/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) as an input to your API client.
+Use our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) as an input to your API client.
 
 ## Applying Governance
 
@@ -170,7 +165,7 @@ You get the following error:
 
 The elegance of this approach lies in how the ruleset can be applied. When developers create their OpenAPI descriptions they can automate their build pipeline to automatically execute the rulesets, ensuring they can tweak their design as expediently as possible. As we know from the general discourse across information technology automation is highly valued and such approaches to testing for accuracy in API design can only be a boost for API providers.
 
-### Task: Add Governance Rules to Spectral Ruleset
+### Task: Add Governance Rules to a Spectral Ruleset
 
 Spectral is a **_hugely_** popular example of an API governance tool.
 
@@ -181,7 +176,7 @@ Please evaluate the examples and as a test of your knowledge add a rule that che
 When you have done this successfully the following errors will appear in the output from Spectral:
 
 ```bash
-https://raw.githubusercontent.com/OAI/OAI-Courses/feat/module-3/src/openapi-v31-fundamentals/module-3-examples/design-first-example/design-first-example-openapi.yaml
+https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml
    2:6   warning  info-contact                         Info object must have "contact" object.                                         info
   53:20    error  additional-properties-must-be-false  additionalProperties must be set to false in a Schema object                    paths./pets.post.requestBody.content.application/json.schema
   104:9    error  additional-properties-must-be-false  additionalProperties must be set to false in a Schema object                    components.schemas.Pet
