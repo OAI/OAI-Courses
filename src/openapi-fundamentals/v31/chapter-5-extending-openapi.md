@@ -305,7 +305,7 @@ What does the Workflows Specification do?
 - [ ] Allows OpenAPI descriptions to be extended with asynchronous operations
 - [ ] Provides an alternative approach to documenting asynchronous operations
 - [ ] Describes common enterprise integration patterns
-- [x] Allows a sequence of API calls to be described through a specification language
+- [x] Allows a sequence of API calls to be described through a description language
 
 ### Question 9
 
