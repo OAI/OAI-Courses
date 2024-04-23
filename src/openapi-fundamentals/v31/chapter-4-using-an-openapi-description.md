@@ -4,9 +4,9 @@
 
 ### Chapter Overview
 
-OpenAPI descriptions provided by API providers can be used by API consumers in a number of different ways, many of which can be qualified in the stages of the API lifecycle we introduced in Chapter 3.
+OpenAPI descriptions provided by API providers can be used by API consumers in many different ways, many of which can be qualified in the stages of the API lifecycle we introduced in Chapter 3.
 
-Activities API consumers can use an OpenAPI description for include generating documentation, generating an API client, and applying governance to API design. Such activities, when used with an OpenAPI description, support API consumers in performing their roles more accurately and efficiently.
+Activities API consumers can use an OpenAPI description for generating documentation, generating an API client, applying governance to API design, and many other activities. Such activities support API consumers in performing their roles more accurately and efficiently.
 
 ### Learning Objectives
 
@@ -20,47 +20,45 @@ By the end of the chapter you should be able to:
 
 ### The API Lifecycle
 
-In Chapter 3 we introduced a hypothetical API lifecycle created by OAI to explain how OpenAPI can be used throughout the development and deployment of APIs:
+In Chapter 3 we introduced a hypothetical API lifecycle. This was created by the OpenAPI Initiative to explain how OpenAPI can be used throughout the development and deployment of APIs:
 
 ![The API lifecycle as imagined by OpenAPI Initiative](https://www.openapis.org/wp-content/uploads/sites/3/2023/05/What-is-OpenAPI-Simple-API-Lifecycle-Vertical.png)
 
-Each stage in this lifecycle is associated with different organizational roles, with a variety of wants and needs from the people partaking in each stage. This determines a great number of use cases for API-related documentation, driven by those activities. Some of these may already be familiar to you, whilst others may be novel in terms of your experiences with APIs.
+Each stage in this lifecycle is associated with different organizational roles, with a variety of wants and needs from the people partaking in each stage. This determines a great number of use cases for API-related documentation, driven by those activities. Some of these may already be familiar to you, whilst others may be novel in terms of your experiences with APIs. To draw out some of these we'll look at several common use cases and provide examples of toolsets that show how an OpenAPI description is leveraged to fulfill the use cases.
 
-To draw out some of these we'll look at several common use cases and provide examples of toolsets that show how an OpenAPI description is leveraged to fulfill the use cases.
-
-Please note that - being an open format - OpenAPI can be used in a huge number of ways depending on the perspective of the API consumer, specific developers, and tooling makers. We are only covering very common ones here.
+Please note that - being an open format - OpenAPI can be used in a huge number of ways depending on the perspective of the API consumer, specific developers, and tooling makers. We are only covering very common activities here.
 
 ## Generating API Documentation
 
 ### Use Case for Generating API Documentation
 
-Our first use cases is generating documentation, which is a feature of the Publish stage of an API lifecycle. You might question why this is so, given the fact that an OpenAPI description is a document encoded in JSON or YAML with a specific structure.
+Our first use case is generating documentation, which is a feature of the Publish stage of an API lifecycle. You might question why this is so, given the fact that an OpenAPI description is a document encoded in JSON or YAML with a specific structure.
 
-The inclusion of Markdown in the specification, however, means that `description` properties can be very rich, including formatting and links to graphics. The API structure expressed in OpenAPI therefore provides the spine of the documentation, while Markdown content provides the "meat on the bone". Toolsets have therefore evolved around the specification that use the content of the OpenAPI description to drive the rendering of human-orientated documentation built for browser the operations the API supports
+Even the bare minimum of information in an OpenAPI description tells us something about the shape of an API. The inclusion of Markdown in the specification, however, means that `description` properties can be very rich, including formatting and links to graphics. An OpenAPI description can therefore provide the spine of the documentation, with Markdown content providing the "meat on the bone". Toolsets have therefore evolved that use the content of the OpenAPI description to drive the rendering of human-orientated documentation built for browsing the operations the API supports
 
 ### Example of Generating API Documentation
 
-You can get a sense of how rich this can by looking at some examples in the wild. Take, for example, Zuora who provide documentation using Redoc. Their [API documentation](https://developer.zuora.com/api-references/api/overview/) is comprehensive, providing developers with everything they need to know about the operations the API supports. It goes without saying that not all the content is embedded in the OpenAPI description as it's too voluminous to manage there. The structure does, however, serve to tie the information together.
+You can get a sense of how rich this can be by looking at some examples in the wild. Take, for example, the organization Zuora who provides documentation using Redoc. Their [API documentation](https://developer.zuora.com/api-references/api/overview/) is very comprehensive, providing developers with everything they need to know about the operations the API supports. Not all the content is embedded in the OpenAPI description as it's too voluminous to manage there, but the structure serves to tie the information together.
 
 ### Task: Generate API documentation using Redoc
 
-Redoc is an open source tool - you saw a screenshot in chapter 3 - and an easy way to provide and example of generating documentation.
+Redoc is an open-source tool - you saw a screenshot in Chapter 3 - and an easy way to provide an example of generating documentation.
 
 Follow [the example](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/generating-documentation/README.md) of using Redoc with our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) if you want to explore publishing documentation in more detail.
 
-## Generating an API client
+## Generating an API Client
 
-### Use Case for Generating an API client
+### Use Case for Generating an API Client
 
-Our first use case shows how API providers dogfood their OpenAPI descriptions to help publish documentation. It makes sense for these providers to also publish OpenAPI descriptions directly to API consumers. Human-focused documentation is only part of the needs of API consumers. They also want the description itself to feed their tools.
+Our first use case shows how API providers dogfood their OpenAPI descriptions to help publish documentation. It makes sense, however, for these providers to also publish OpenAPI descriptions directly to API consumers. Human-focused documentation is only part of the needs of API consumers - they also want the description itself to feed their tools.
 
-This is another key aspect of the Publish stage in our lifecycle. We've already looked at design-first verses code-first as the means for creating your OpenAPI description document. Regardless of the approach, a some point - obviously - a API consumer will want to do something with you OpenAPI description document.
+This is another key aspect of the Publish stage in our lifecycle. We've already looked at design-first versus code-first as the means for creating your OpenAPI description document. Regardless of the approach, a some point - obviously - an API consumer will want to do something with your OpenAPI description document.
 
-One example of how an OpenAPI description can be used for creating clients in software based on the structure of the API. This is usually done by processing the description and performing code generation in a target language. There is an **_enormous_** number of tools that will do this for you, with your choice based on support for your programming language or application framework.
+One example of how an OpenAPI description can be used for creating software clients based on the structure of the API. This is usually done by processing the description and performing code generation in a target language. There is an **_enormous_** number of tools that will do this for you, with your choice based on support for your programming language or application framework.
 
 ### Example of Generating an API Client
 
-One such tool is [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/) from Microsoft. The idea of this tool is to provide a consistent API client experience without sacrificing extensibility, with API access is wrapped around a given object. Taking an example written in C# from the [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/experience#create-a-resource) documentation:
+One such tool is [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/) from Microsoft. The idea of this tool is to provide a consistent API client experience without sacrificing extensibility, with API access wrapped around a given object. Take an example written in C# from the [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/experience#create-a-resource) documentation:
 
 ```c#
 // An authentication provider from the supported language table
@@ -79,9 +77,9 @@ var newUser = new User
 await client.Users.PostAsync(newUser);
 ```
 
-The developer uses the `ApiClient` object to interact with the API, simplifying the integration effort. It goes without saying that this is both a simple example and can also be achieved with many other toolsets. The point is, however, it seamlessly meets the goal of passing knowledge from API provider to API consumer, who can use that knowledge in as near automated fashion as possible. This can provide a significant boost for developers who do not need to hand craft a client to access a given API.
+The developer uses the `ApiClient` object to interact with the API, simplifying the integration effort. This is obviously both a simple example and can also be achieved with many other toolsets. The point is, however, that it seamlessly meets the goal of passing knowledge from the API provider to API consumers, who can use that knowledge in as near automated fashion as possible. This can provide a significant boost for developers who do not need to handcraft a client to access a given API.
 
-We've picked on generating an API client as a use case, but you can extended the scope of this back into the Configure stage of our API lifecycle. Many tooling vendors - especially those in the API management space - leverage OpenAPI descriptions to configure infrastructure such as API gateways. Typically these will be enhanced with Specification Extensions, which we will cover in chapter 5.
+We've picked generating an API client as a use case, but you can extend the scope of this back into the Configure stage of our API lifecycle. Many tooling vendors - especially those in the API management space - leverage OpenAPI descriptions to configure infrastructure such as API gateways. Typically these will be enhanced with Specification Extensions, which we will cover in Chapter 5.
 
 ### Task: Generating an API Client using Kiota
 
@@ -95,11 +93,9 @@ Use our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI
 
 ### Use Case for Applying Governance
 
-In our first two use cases we've focused largely on meeting the needs of API consumers by providing an OpenAPI description to help in their goal of integrating with your APIs.
+In our first two use cases, we've focused largely on meeting the needs of API consumers by providing an OpenAPI description to help in their goal of integrating with your APIs. There are other ways we can leverage our OpenAPI description before we get to the point of publishing it to API consumers. One area is that of ensuring our APIs adhere to our internal standards for design, which is often called **_design-time governance_**. This style of governance is an essential part of the API lifecycle in many organizations and ensures that when APIs are published to consumers they are designed to be consistent and fit for purpose.
 
-There are other ways we can leverage our OpenAPI description, however, way before we get to the point of publishing it to API consumers. One area is that of ensuring our APIs adhere to our internal standards for design, which we characterize as **_design-time governance_**. This style of governance is an essential part of the API lifecycle in many organizations, and ensures that when APIs are published to consumers they are designed to be consistent and fit-for-purpose.
-
-Whilst this style of governance is not a silver bullet - as the design itself needs to implemented in software, which needs to be tested - it can help catch design issues that are contrary to how an organization wants to design its APIs. You need, of course, to be creating or generating your OpenAPI descriptions early enough in the API lifecycle to succeed in this style of governance, but it can reap rewards for your organization.
+Whilst this style of governance is not a silver bullet - as the design itself needs to be implemented in software, which needs to be tested - it can help catch design issues do not conform with how an organization wants to design its APIs. You need, of course, to create or generate your OpenAPI descriptions early enough in the API lifecycle to succeed in this style of governance, but it can reap rewards for your organization.
 
 ### Example of Applying Governance
 
@@ -122,12 +118,12 @@ rules:
 To annotate the example:
 
 - The ruleset extends Spectral's default ruleset for OpenAPI (`extends: spectral:oas`).
-- The `rules` property allows you specify one-or-more design rules with each uniquely identified with a name.
-- Each rule provides a message and severity to drive how the correct behaviours when an error is encountered.
+- The `rules` property allows you to specify one or more design rules with each uniquely identified with a name.
+- Each rule provides a message and severity to drive how the correct behaviors when an error is encountered.
 - A JSON Path is also specified to indicate the object to which the rule applies in an OpenAPI description.
-- The rule itself is applied using the `then` clause. In this case the `security` property must be present on each resolved Operation, checked using the built-in function `truthy`.
+- The rule itself is applied using the `then` clause. In this example, the `security` property must be present on each resolved Operation, checked using the built-in function `truthy`.
 
-The purpose of this ruleset - as the example shows - is to ensure that a Security Requirement is defined (although this does not check for an empty object - this is ignored to keep the example simple). This could be an important requirement for an API provider, and therefore is implemented to check all designs include it.
+The purpose of this ruleset - as the example shows - is to ensure that a Security Requirement is defined (although this does not check for an empty object, which is ignored to keep the example simple). This could be an important requirement for an API provider and therefore is implemented to check all designs include it.
 
 When you apply it to this OpenAPI description:
 
@@ -163,13 +159,13 @@ You get the following error:
 (oai_course_chapter4) ➜  $
 ```
 
-The elegance of this approach lies in how the ruleset can be applied. When developers create their OpenAPI descriptions they can automate their build pipeline to automatically execute the rulesets, ensuring they can tweak their design as expediently as possible. As we know from the general discourse across information technology automation is highly valued and such approaches to testing for accuracy in API design can only be a boost for API providers.
+The elegance of this approach lies in how the ruleset can be applied. When developers create their OpenAPI descriptions they can automate their build pipeline to automatically execute the rulesets, ensuring they can tweak their design as expediently as possible. As we know from the general discourse across information technology, automation is highly valued and such approaches to testing for accuracy in API design can only be a boost for API providers.
 
 ### Task: Add Governance Rules to a Spectral Ruleset
 
 Spectral is a **_hugely_** popular example of an API governance tool.
 
-We've an some example [Spectral ruleset](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/applying-governance/README.md) to help you understand more about this topic.
+We've defined an example [Spectral ruleset](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/applying-governance/README.md) to help you understand more about this topic.
 
 Please evaluate the examples and as a test of your knowledge add a rule that checks that all Schema objects implement the property `additionalProperties: false`. If this check fails an error message should be returned that reads "additionalProperties must be set to false in a Schema object".
 
@@ -183,7 +179,7 @@ https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundament
  119:11    error  additional-properties-must-be-false  additionalProperties must be set to false in a Schema object                    components.schemas.Error
 ```
 
-Please also make sure you search the internet for alternative Spectral rulesets as there are hundreds of examples out there. Start with list of real-world rulesets from the [Spectral documentation](https://docs.stoplight.io/docs/spectral/674b27b261c3c-overview#-real-world-rulesets).
+Please also make sure you search the internet for alternative Spectral rulesets as there are hundreds of examples out there. Start with the list of real-world rulesets from the [Spectral documentation](https://docs.stoplight.io/docs/spectral/674b27b261c3c-overview#-real-world-rulesets).
 
 ## Knowledge Check
 
@@ -232,15 +228,15 @@ What programming languages can API clients be generated in?
 - [ ] Python
 - [ ] Java
 - [ ] Lisp
-- [x] Any where tools are available in the ecosystem
+- [x] Anywhere tools are available in the ecosystem
 
 ### Question 6
 
-What other example did we give of how an OpenAPI description can be used by API consumer?
+What other example did we give of how an OpenAPI description can be used by API consumers?
 
 - [x] Configuring infrastructure such as API gateways
 - [ ] Generating keys and certificates
-- [ ] Writing Gherkin style test cases
+- [ ] Writing Gherkin-style test cases
 - [ ] Testing requirements
 
 ### Question 7
@@ -256,10 +252,10 @@ In this example, what did we point to as being a common way of extending OpenAPI
 
 Can tools like Spectral meet all your API governance needs?
 
-- [ ] Yes they are a silver bullet
-- [ ] No you need other tools to test the API design
-- [ ] No you need to test the implementation in software
-- [x] No you need to test both the design and the implementation with appropriate tools
+- [ ] Yes, they are a silver bullet
+- [ ] No, you need other tools to test the API design
+- [ ] No, you need to test the implementation in your software
+- [x] No, you need to test both the design and the implementation with the appropriate tools
 
 ### Question 9
 
