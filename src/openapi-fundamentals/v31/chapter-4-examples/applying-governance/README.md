@@ -17,13 +17,13 @@ The Spectral CLI should now be in your path ready to use.
 To run our baseline Spectral ruleset against the OpenAPI description from Chapter 3 execute the following command in this directory:
 
 ```bash
-spectral lint --ruleset rulesets/baseline.yaml https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/module-3-examples/design-first-example/design-first-example-openapi.yaml
+spectral lint --ruleset rulesets/baseline.yaml https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-fundamentals/v31/module-3-examples/design-first-example/design-first-example-openapi.yaml
 ```
 
 You should see the following output:
 
 ```bash
-https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/module-3-examples/design-first-example/design-first-example-openapi.yaml
+https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-fundamentals/v31/module-3-examples/design-first-example/design-first-example-openapi.yaml
   2:6  warning  info-contact      Info object must have "contact" object.                                         info
 
 ✖ 2 problems (0 error, 1 warnings, 0 infos, 0 hints)
