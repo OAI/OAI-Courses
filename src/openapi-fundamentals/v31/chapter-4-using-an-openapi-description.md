@@ -44,7 +44,7 @@ You can get a sense of how rich this can be by looking at some examples in the w
 
 Redoc is an open-source tool - you saw a screenshot in Chapter 3 - and an easy way to provide an example of generating documentation.
 
-Follow [the example](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/generating-documentation/README.md) of using Redoc with our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) if you want to explore publishing documentation in more detail.
+Follow [the example](https://github.com/OAI/OAI-Courses/blob/main/chapter-4-examples/generating-documentation/README.md) of using Redoc with our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-fundamentals/v31/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) if you want to explore publishing documentation in more detail.
 
 ## Generating an API Client
 
@@ -87,7 +87,7 @@ Kiota supports [a number](https://learn.microsoft.com/en-us/openapi/kiota/quicks
 
 Use one of the quick-start guides in your choice of programming language to explore generating an API client in more detail.
 
-Use our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) as an input to your API client.
+Use our [design-first OpenAPI description](https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-fundamentals/v31/chapter-3-examples/design-first-example/design-first-example-openapi.yaml) as an input to your API client.
 
 ## Applying Governance
 
@@ -172,7 +172,7 @@ Please evaluate the examples and as a test of your knowledge add a rule that che
 When you have done this successfully the following errors will appear in the output from Spectral:
 
 ```bash
-https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-v31-fundamentals/chapter-3-examples/design-first-example/design-first-example-openapi.yaml
+https://raw.githubusercontent.com/OAI/OAI-Courses/main/src/openapi-fundamentals/v31/chapter-3-examples/design-first-example/design-first-example-openapi.yaml
    2:6   warning  info-contact                         Info object must have "contact" object.                                         info
   53:20    error  additional-properties-must-be-false  additionalProperties must be set to false in a Schema object                    paths./pets.post.requestBody.content.application/json.schema
   104:9    error  additional-properties-must-be-false  additionalProperties must be set to false in a Schema object                    components.schemas.Pet
