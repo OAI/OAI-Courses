@@ -3,3 +3,4 @@ build/
 venv/
 __pycache__/
 *.docx
+.DS_Store
