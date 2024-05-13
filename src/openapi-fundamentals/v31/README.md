@@ -115,7 +115,7 @@ Create an OpenAPI Description using both code-first and design-first methodologi
 
 Use an OpenAPI Description with a range of tools that help you throughout the API lifecycle.
 
-#### Topics
+#### Topics
 
 - Introduction
   - Chapter Overview
