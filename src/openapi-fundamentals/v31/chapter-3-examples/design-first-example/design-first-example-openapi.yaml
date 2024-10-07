@@ -23,6 +23,13 @@ paths:
       tags:
       - GET
       - Read
+      parameters:
+        - name: petId
+          description: Unique and immutable identifier for a pet
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: List of pets provided at the Petstore
